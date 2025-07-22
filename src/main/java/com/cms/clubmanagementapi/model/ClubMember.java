@@ -12,6 +12,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "club_members")
+
+// update veritabanından yapılmalı
+
 public class ClubMember {
 
     @Id
@@ -26,6 +29,39 @@ public class ClubMember {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "member_id", unique = true)
+    private String memberId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private MemberRole role;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "tel_number", unique = true)
+    private String telNumber;
+
+    @Column(name = "year_of_study")
+    private int yearOfStudy;
+
+    @Column(name = "faculty")
+    private String faculty;
+
+    @Column(name = "department")
+    private String department;
+
+    @Column(name = "registration_date")
+    private LocalDate registrationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "membership_status")
+    private MemberStatus membershipStatus;
+
+    /*
+
+    // programda planlanan yapı
 
     @Column(name = "member_id", unique = true, nullable = false)
     private String memberId;
@@ -50,10 +86,11 @@ public class ClubMember {
     private String department;
 
     @Column(name = "registration_date", nullable = false)
-    private LocalDate registrationDate; // Kulübe Kayıt Tarihi (DATE)
+    private LocalDate registrationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "membership_status", nullable = false)
     private MemberStatus membershipStatus;
+    */
 
 }
