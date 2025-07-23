@@ -16,16 +16,23 @@ public class ClubMemberController {
         this.clubMemberService = clubMemberService;
     }
 
-    //get all members
+    // get all members
     @GetMapping
     public List<ClubMember> findAllMembers(){
         return clubMemberService.findAllMembers();
     }
 
-    //create member
+    // create member
     @PostMapping
     public ClubMember createMember(@RequestBody ClubMember clubMember){
         return clubMemberService.createMember(clubMember);
     }
 
+    // delete member
+    @DeleteMapping("/{id}")
+    public String deleteMember(@PathVariable Long id){
+        clubMemberService.deleteMember(id);
+
+        return (id + " deleted.");
+    }
 }
