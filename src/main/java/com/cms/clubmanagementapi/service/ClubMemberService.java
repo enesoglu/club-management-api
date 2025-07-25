@@ -12,9 +12,6 @@ public class ClubMemberService {
 
     private final ClubMemberRepo clubMemberRepo;
 
-
-    public List<ClubMember> findAllMembers;
-
     public ClubMemberService(ClubMemberRepo clubMemberRepo) {
         this.clubMemberRepo = clubMemberRepo;
     }
