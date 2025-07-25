@@ -1,18 +1,37 @@
-package com.cms.clubmanagementapi.config;
+package com.cms.clubmanagementapi.config; // Senin paket adınla aynı olmalı
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")                             // API'deki hangi URL'lerin etkileneceği (/api/ ile başlayan tümü)
-                .allowedOrigins("http://localhost:3000")                     // Hangi adresten gelen isteklere izin verileceği
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")   // Hangi HTTP metodlarına izin verileceği
-                .allowedHeaders("*")                                         // Gelen istekte hangi header'lara izin verileceği
-                .allowCredentials(true);
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+
+        // Kimlik bilgileriyle (cookie vb.) isteklere izin ver
+        config.setAllowCredentials(true);
+
+        // Sadece Angular uygulamasından gelen isteklere izin ver
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
+
+        // İzin verilen tüm HTTP başlıkları
+        config.setAllowedHeaders(List.of("*"));
+
+        // İzin verilen tüm HTTP metotları (GET, POST, vb.)
+        config.setAllowedMethods(List.of("*"));
+
+        // Bu yapılandırmayı /api/ ile başlayan tüm yollar için kaydet
+        source.registerCorsConfiguration("/api/**", config);
+
+        return new CorsFilter(source);
     }
 }
