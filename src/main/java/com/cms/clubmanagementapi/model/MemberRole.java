@@ -5,5 +5,6 @@ public enum MemberRole {
     VICE_PRESIDENT,
     BOARD_MEMBER,
     CREW,
-    MEMBER
+    MEMBER,
+    VETERAN
 }

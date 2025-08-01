@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 
 @Data
@@ -41,10 +41,10 @@ public class ClubMember {
     private String email;
 
     @Column(name = "tel_number", unique = true)
-    private String telNumber;
+    private String phoneNumber;
 
     @Column(name = "year_of_study")
-    private int yearOfStudy;
+    private String yearOfStudy;
 
     @Column(name = "faculty")
     private String faculty;
@@ -52,7 +52,8 @@ public class ClubMember {
     @Column(name = "department")
     private String department;
 
-    @Column(name = "registration_date")
+    @CreationTimestamp
+    @Column(name = "registration_date", updatable = false)
     private LocalDate registrationDate;
 
     @Enumerated(EnumType.STRING)
