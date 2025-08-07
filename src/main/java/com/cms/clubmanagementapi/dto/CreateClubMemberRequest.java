@@ -10,7 +10,7 @@ public class CreateClubMemberRequest {
     private String name;
     private String email;
     private String phone;
-    private int schoolNo;
+    private String schoolNo;
     private String nationalId;
     private String faculty;
     private String department;

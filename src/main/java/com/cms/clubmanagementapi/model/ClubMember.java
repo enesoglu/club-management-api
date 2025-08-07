@@ -21,22 +21,22 @@ public class ClubMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name",           nullable = false                )
     private String name;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email",          nullable = false, unique = true )
     private String email;
 
-    @Column(name = "phone", unique = true)
+    @Column(name = "phone",          nullable = false, unique = true )
     private String phone;
 
-    @Column(name = "school_no", nullable = false)
-    private int schoolNo;
+    @Column(name = "school_no",      nullable = false, unique = true )
+    private String schoolNo;
 
-    @Column(name = "national_id", unique = true, nullable = false)
+    @Column(name = "national_id",    nullable = false, unique = true )
     private String nationalId;
 
-    @Column(name = "year_of_study")
+    @Column(name = "year_of_study",  nullable = false                )
     private String yearOfStudy;
 
     @Column(name = "faculty")

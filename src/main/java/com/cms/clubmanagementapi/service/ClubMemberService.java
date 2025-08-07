@@ -65,7 +65,7 @@ public class ClubMemberService {
                 newMember.setName(csvRecord.get("name"));
                 newMember.setEmail(csvRecord.get("email"));
                 newMember.setPhone(csvRecord.get("phone"));
-                newMember.setSchoolNo(Integer.parseInt(csvRecord.get("schoolNo")));
+                newMember.setSchoolNo(csvRecord.get("schoolNo"));
                 newMember.setEmail(csvRecord.get("email"));
                 newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
                 newMember.setFaculty(csvRecord.get("faculty"));
