@@ -62,11 +62,10 @@ public class ClubMemberService {
             for (CSVRecord csvRecord : csvParser) {
                 ClubMember newMember = new ClubMember();
 
-                newMember.setFirstName(csvRecord.get("firstName"));
-                newMember.setLastName(csvRecord.get("lastName"));
+                newMember.setName(csvRecord.get("name"));
                 newMember.setEmail(csvRecord.get("email"));
-                newMember.setPhoneNumber(csvRecord.get("phoneNumber"));
-                newMember.setMemberNo(Integer.parseInt(csvRecord.get("memberNo")));
+                newMember.setPhone(csvRecord.get("phone"));
+                newMember.setSchoolNo(Integer.parseInt(csvRecord.get("schoolNo")));
                 newMember.setEmail(csvRecord.get("email"));
                 newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
                 newMember.setFaculty(csvRecord.get("faculty"));
