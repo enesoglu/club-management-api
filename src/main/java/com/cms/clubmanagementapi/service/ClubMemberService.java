@@ -70,7 +70,8 @@ public class ClubMemberService {
                 newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
                 newMember.setFaculty(csvRecord.get("faculty"));
                 newMember.setDepartment(csvRecord.get("department"));
-                newMember.setRole(MemberRole.MEMBER);
+                //TODO
+                // newMember.setRole(MemberRole.MEMBER);
                 newMember.setMembershipStatus(MemberStatus.ACTIVE);
 
                 membersToSave.add(newMember);

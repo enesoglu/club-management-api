@@ -1,6 +1,8 @@
 package com.cms.clubmanagementapi.controller;
 
+import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
+import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.service.ClubMemberService;
 
 import org.springframework.web.bind.annotation.*;
