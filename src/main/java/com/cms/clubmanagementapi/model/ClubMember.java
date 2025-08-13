@@ -1,19 +1,21 @@
 package com.cms.clubmanagementapi.model;
 
+import com.cms.clubmanagementapi.model.role.Position;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "club_members")
-
-// update veritabanından yapılmalı
 
 public class ClubMember {
 
@@ -50,13 +52,23 @@ public class ClubMember {
     private LocalDate registrationDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private MemberRole role = MemberRole.MEMBER;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private MemberStatus membershipStatus = MemberStatus.ACTIVE;
 
     @Column(name = "password")
     private String password;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Position> positions = new ArrayList<>();
+
+    public void setPositions(List<Position> positions) {
+        if (positions != null) {
+            this.positions.clear();
+            positions.forEach(position -> {
+                position.setMember(this);
+                this.positions.add(position);
+            });
+        }
+    }
 }
