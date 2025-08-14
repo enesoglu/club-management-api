@@ -28,6 +28,13 @@ public class ClubMemberController {
         return clubMemberService.findAllMembers();
     }
 
+    // get member by id
+    @GetMapping("/{id}")
+    public ResponseEntity<ClubMemberDTO> findMemberById(@PathVariable Long id){
+        ClubMemberDTO memberDTO = clubMemberService.findMemberById(id);
+        return ResponseEntity.ok(memberDTO);
+    }
+
     // create member
     @PostMapping
     public ClubMember createMember(@RequestBody CreateClubMemberRequest clubMember){

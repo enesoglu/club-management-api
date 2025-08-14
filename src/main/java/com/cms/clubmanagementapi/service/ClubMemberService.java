@@ -43,6 +43,12 @@ public class ClubMemberService {
         return clubMemberMapper.toDTOList(members);
     }
 
+    public ClubMemberDTO findMemberById(long id) {
+        ClubMember member = clubMemberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
+        return clubMemberMapper.toDTO(member);
+    }
+
     // create new member
     public ClubMember createMember(CreateClubMemberRequest member) {
         return clubMemberRepository.save(clubMemberMapper.toEntity(member));
