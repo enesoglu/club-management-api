@@ -1,49 +1,43 @@
 package com.cms.clubmanagementapi.model;
 
+import com.cms.clubmanagementapi.model.role.Position;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = "positions")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "club_members")
-
-// update veritabanından yapılmalı
-
 public class ClubMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_no", nullable = false)
-    private int memberNo;
+    @Column(name = "name",           nullable = false                )
+    private String name;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "member_id", unique = true)
-    private String memberId;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private MemberRole role;
-
-    @Column(name = "email", unique = true)
+    @Column(name = "email",          nullable = false, unique = true )
     private String email;
 
-    @Column(name = "tel_number", unique = true)
-    private String phoneNumber;
+    @Column(name = "phone",          nullable = false, unique = true )
+    private String phone;
 
-    @Column(name = "year_of_study")
+    @Column(name = "school_no",      nullable = false, unique = true )
+    private String schoolNo;
+
+    @Column(name = "national_id",    nullable = false, unique = true )
+    private String nationalId;
+
+    @Column(name = "year_of_study",  nullable = false                )
     private String yearOfStudy;
 
     @Column(name = "faculty")
@@ -53,45 +47,27 @@ public class ClubMember {
     private String department;
 
     @CreationTimestamp
-    @Column(name = "registration_date", updatable = false)
+    @Column(name = "registration_date")
     private LocalDate registrationDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "membership_status")
-    private MemberStatus membershipStatus;
+    @Column(name = "status")
+    private MemberStatus membershipStatus = MemberStatus.ACTIVE;
 
-    /*
+    @Column(name = "password")
+    private String password;
 
-    // programda planlanan yapı
+    @JsonManagedReference
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Position> positions = new ArrayList<>();
 
-    @Column(name = "member_id", unique = true, nullable = false)
-    private String memberId;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private MemberRole role;
-
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-
-    @Column(name = "tel_number", unique = true, nullable = false)
-    private String telNumber;
-
-    @Column(name = "year_of_study", nullable = false)
-    private int yearOfStudy;
-
-    @Column(name = "faculty", nullable = false)
-    private String faculty;
-
-    @Column(name = "department", nullable = false)
-    private String department;
-
-    @Column(name = "registration_date", nullable = false)
-    private LocalDate registrationDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "membership_status", nullable = false)
-    private MemberStatus membershipStatus;
-    */
-
+    public void setPositions(List<Position> positions) {
+        if (positions != null) {
+            this.positions.clear();
+            positions.forEach(position -> {
+                position.setMember(this);
+                this.positions.add(position);
+            });
+        }
+    }
 }

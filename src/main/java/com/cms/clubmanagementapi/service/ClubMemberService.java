@@ -1,10 +1,13 @@
 package com.cms.clubmanagementapi.service;
 
+import com.cms.clubmanagementapi.dto.ClubMemberDTO;
+import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
-import com.cms.clubmanagementapi.model.MemberRole;
 import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
+import com.cms.clubmanagementapi.mapper.ClubMemberMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,22 +29,29 @@ public class ClubMemberService {
 
     private final ClubMemberRepository clubMemberRepository;
 
-    public ClubMemberService(ClubMemberRepository clubMemberRepository) {
+    @Autowired
+    private final ClubMemberMapper clubMemberMapper;
+
+    public ClubMemberService(ClubMemberRepository clubMemberRepository, ClubMemberMapper clubMemberMapper) {
         this.clubMemberRepository = clubMemberRepository;
+        this.clubMemberMapper = clubMemberMapper;
     }
 
     // get all members
-    public List<ClubMember> findAllMembers(){
-        return clubMemberRepository.findAll();
+    public List<ClubMemberDTO> findAllMembers() {
+        List<ClubMember> members = clubMemberRepository.findAll();
+        return clubMemberMapper.toDTOList(members);
     }
 
     // create new member
-    public ClubMember createMember(ClubMember member){
-        return clubMemberRepository.save(member);
+    public ClubMember createMember(CreateClubMemberRequest member) {
+        return clubMemberRepository.save(clubMemberMapper.toEntity(member));
     }
 
     // delete a member
-    public void deleteMember(@PathVariable Long id) { clubMemberRepository.deleteById(id);}
+    public void deleteMember(@PathVariable Long id) {
+        clubMemberRepository.deleteById(id);
+    }
 
     // create new members from csv file
     @Transactional
@@ -54,24 +64,25 @@ public class ClubMemberService {
                 .setTrim(true)
                 .build();
 
-        List<ClubMember> membersToSave = new ArrayList<>();
+        List<CreateClubMemberRequest> membersToSave = new ArrayList<>();
+    }
+}
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+        /*try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = CSVParser.parse(reader, format)) {
 
             for (CSVRecord csvRecord : csvParser) {
-                ClubMember newMember = new ClubMember();
+                CreateClubMemberRequest newMember = new CreateClubMemberRequest();
 
-                newMember.setFirstName(csvRecord.get("firstName"));
-                newMember.setLastName(csvRecord.get("lastName"));
+                newMember.setName(csvRecord.get("name"));
                 newMember.setEmail(csvRecord.get("email"));
-                newMember.setPhoneNumber(csvRecord.get("phoneNumber"));
-                newMember.setMemberNo(Integer.parseInt(csvRecord.get("memberNo")));
-                newMember.setEmail(csvRecord.get("email"));
+                newMember.setPhone(csvRecord.get("phone"));
+                newMember.setSchoolNo(csvRecord.get("schoolNo"));
                 newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
                 newMember.setFaculty(csvRecord.get("faculty"));
                 newMember.setDepartment(csvRecord.get("department"));
-                newMember.setRole(MemberRole.MEMBER);
+                //TODO
+                // newMember.setRole(MemberRole.MEMBER);
                 newMember.setMembershipStatus(MemberStatus.ACTIVE);
 
                 membersToSave.add(newMember);
@@ -79,7 +90,7 @@ public class ClubMemberService {
         }
 
         if (!membersToSave.isEmpty()) {
-            clubMemberRepository.saveAll(membersToSave);
+            clubMemberRepository.saveAll(clubMemberMapper.toEntityList(membersToSave));
         }
-    }
-}
+    }*/
+

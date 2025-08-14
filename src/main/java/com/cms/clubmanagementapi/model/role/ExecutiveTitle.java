@@ -1,0 +1,17 @@
+package com.cms.clubmanagementapi.model.role;
+
+public enum ExecutiveTitle {
+
+    PRESIDENT,
+    VICE_PRESIDENT,
+    BOARD_MEMBER,
+
+    DIRECTOR_OF_PR,
+    DIRECTOR_OF_SPONSORSHIP,
+    DIRECTOR_OF_COMMUNICATIONS,
+    DIRECTOR_OF_YOUTUBE,
+    DIRECTOR_OF_PROJECTS,
+    DIRECTOR_OF_PUBLICATIONS,
+    DIRECTOR_OF_DESIGN,
+
+}

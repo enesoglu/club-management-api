@@ -1,5 +1,7 @@
 package com.cms.clubmanagementapi.controller;
 
+import com.cms.clubmanagementapi.dto.ClubMemberDTO;
+import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.service.ClubMemberService;
 
@@ -22,13 +24,13 @@ public class ClubMemberController {
 
     // get all members
     @GetMapping
-    public List<ClubMember> findAllMembers(){
+    public List<ClubMemberDTO> findAllMembers(){
         return clubMemberService.findAllMembers();
     }
 
     // create member
     @PostMapping
-    public ClubMember createMember(@RequestBody ClubMember clubMember){
+    public ClubMember createMember(@RequestBody CreateClubMemberRequest clubMember){
         return clubMemberService.createMember(clubMember);
     }
 
