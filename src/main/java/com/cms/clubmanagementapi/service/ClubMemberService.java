@@ -5,6 +5,7 @@ import com.cms.clubmanagementapi.model.MemberRole;
 import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,11 @@ import java.util.List;
 public class ClubMemberService {
 
     private final ClubMemberRepository clubMemberRepository;
+<<<<<<< Updated upstream
+=======
+    @Autowired
+    private final ClubMemberMapper clubMemberMapper;
+>>>>>>> Stashed changes
 
     public ClubMemberService(ClubMemberRepository clubMemberRepository) {
         this.clubMemberRepository = clubMemberRepository;
