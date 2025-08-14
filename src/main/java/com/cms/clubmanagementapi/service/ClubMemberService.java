@@ -1,9 +1,11 @@
 package com.cms.clubmanagementapi.service;
 
+import com.cms.clubmanagementapi.dto.ClubMemberDTO;
+import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
-import com.cms.clubmanagementapi.model.MemberRole;
 import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
+import com.cms.clubmanagementapi.mapper.ClubMemberMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,24 +28,24 @@ import java.util.List;
 public class ClubMemberService {
 
     private final ClubMemberRepository clubMemberRepository;
-<<<<<<< Updated upstream
-=======
+
     @Autowired
     private final ClubMemberMapper clubMemberMapper;
->>>>>>> Stashed changes
 
-    public ClubMemberService(ClubMemberRepository clubMemberRepository) {
+    public ClubMemberService(ClubMemberRepository clubMemberRepository, ClubMemberMapper clubMemberMapper) {
         this.clubMemberRepository = clubMemberRepository;
+        this.clubMemberMapper = clubMemberMapper;
     }
 
     // get all members
-    public List<ClubMember> findAllMembers(){
-        return clubMemberRepository.findAll();
+    public List<ClubMemberDTO> findAllMembers(){
+        List<ClubMember> members = clubMemberRepository.findAll();
+        return clubMemberMapper.toDTOList(members);
     }
 
     // create new member
-    public ClubMember createMember(ClubMember member){
-        return clubMemberRepository.save(member);
+    public ClubMember createMember(CreateClubMemberRequest member){
+        return clubMemberRepository.save(clubMemberMapper.toEntity(member));
     }
 
     // delete a member
@@ -60,13 +62,13 @@ public class ClubMemberService {
                 .setTrim(true)
                 .build();
 
-        List<ClubMember> membersToSave = new ArrayList<>();
+        List<CreateClubMemberRequest> membersToSave = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = CSVParser.parse(reader, format)) {
 
             for (CSVRecord csvRecord : csvParser) {
-                ClubMember newMember = new ClubMember();
+                CreateClubMemberRequest newMember = new CreateClubMemberRequest();
 
                 newMember.setName(csvRecord.get("name"));
                 newMember.setEmail(csvRecord.get("email"));
@@ -85,7 +87,7 @@ public class ClubMemberService {
         }
 
         if (!membersToSave.isEmpty()) {
-            clubMemberRepository.saveAll(membersToSave);
+            clubMemberRepository.saveAll(clubMemberMapper.toEntityList(membersToSave));
         }
     }
 }

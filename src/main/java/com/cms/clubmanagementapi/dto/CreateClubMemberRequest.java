@@ -1,9 +1,10 @@
 package com.cms.clubmanagementapi.dto;
 
-import com.cms.clubmanagementapi.model.MemberRole;
+import com.cms.clubmanagementapi.model.MemberStatus;
+import com.cms.clubmanagementapi.model.role.MemberRole;
 import lombok.Data;
 
-//  request dto
+//  create request dto
 @Data
 public class CreateClubMemberRequest {
 
@@ -17,4 +18,6 @@ public class CreateClubMemberRequest {
     private MemberRole role;
     private String yearOfStudy;
     private String password;
+    private MemberStatus membershipStatus;
+
 }
