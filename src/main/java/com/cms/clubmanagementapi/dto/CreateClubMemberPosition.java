@@ -5,8 +5,6 @@ import com.cms.clubmanagementapi.model.role.ExecutiveTitle;
 import com.cms.clubmanagementapi.model.role.Team;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
 public class CreateClubMemberPosition {
 

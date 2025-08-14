@@ -7,7 +7,6 @@ import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.mapper.ClubMemberMapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +28,6 @@ public class ClubMemberService {
 
     private final ClubMemberRepository clubMemberRepository;
 
-    @Autowired
     private final ClubMemberMapper clubMemberMapper;
 
     public ClubMemberService(ClubMemberRepository clubMemberRepository, ClubMemberMapper clubMemberMapper) {
@@ -71,11 +69,9 @@ public class ClubMemberService {
                 .build();
 
         List<CreateClubMemberRequest> membersToSave = new ArrayList<>();
-    }
-}
 
-        /*try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
-             CSVParser csvParser = CSVParser.parse(reader, format)) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+             CSVParser csvParser = new CSVParser(reader, format)) {
 
             for (CSVRecord csvRecord : csvParser) {
                 CreateClubMemberRequest newMember = new CreateClubMemberRequest();
@@ -84,19 +80,21 @@ public class ClubMemberService {
                 newMember.setEmail(csvRecord.get("email"));
                 newMember.setPhone(csvRecord.get("phone"));
                 newMember.setSchoolNo(csvRecord.get("schoolNo"));
+                newMember.setNationalId(csvRecord.get("nationalId"));
                 newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
                 newMember.setFaculty(csvRecord.get("faculty"));
                 newMember.setDepartment(csvRecord.get("department"));
-                //TODO
-                // newMember.setRole(MemberRole.MEMBER);
-                newMember.setMembershipStatus(MemberStatus.ACTIVE);
+                newMember.setPassword(csvRecord.get("password"));
+                newMember.setMembershipStatus(MemberStatus.ACTIVE); // Varsayılan olarak AKTİF üye
 
                 membersToSave.add(newMember);
             }
         }
 
         if (!membersToSave.isEmpty()) {
-            clubMemberRepository.saveAll(clubMemberMapper.toEntityList(membersToSave));
+            // MapStruct mapper'ını kullanarak DTO listesini Entity listesine çevir
+            List<ClubMember> clubMembers = clubMemberMapper.toEntityList(membersToSave);
+            clubMemberRepository.saveAll(clubMembers); // Tüm üyeleri tek seferde kaydet
         }
-    }*/
-
+    }
+}
