@@ -8,7 +8,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 /**
- * the entitiy "position" represents every one of member's every title
+ * the entitiy "position" represents every one of member's every title.
  * the answer of "who, in which team, in which term, had this title?"
  */
 

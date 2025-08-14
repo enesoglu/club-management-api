@@ -2,8 +2,11 @@ package com.cms.clubmanagementapi.model.role;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "teams")
 public class Team {
