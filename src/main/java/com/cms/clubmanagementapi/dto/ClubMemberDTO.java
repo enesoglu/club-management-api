@@ -17,4 +17,6 @@ public class ClubMemberDTO {
     private String department;
     private LocalDate registrationDate;
     private MemberStatus membershipStatus;
+    private PositionDTO position;
+
 }
