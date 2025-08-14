@@ -2,14 +2,18 @@ package com.cms.clubmanagementapi.model.role;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *   the table "terms" contains active years of the club.
- *   term values used for determine which term (e.g 2024-2025) the position in.
+ *   term values used for determine which term (e.g 2024-2025) the position is in.
  *   see: model/role/Position.java
  */
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "terms")
 public class Term {
