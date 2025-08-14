@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 /**
  * the entitiy "position" represents every one of member's every title.
- * the answer of "who, in which team, in which term, had this title?"
+ * the answer of "who, in which team, in which term, had which title?"
  */
 
 @Getter
@@ -25,29 +25,29 @@ public class Position {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // member id for matching the position to its owner
+    // member id for matching the position to its owner.
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private ClubMember member;
 
-    // team id of the position (member)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", nullable = false)
+    // which team the position is in? see: model/role/Teams.java
+    @Enumerated(EnumType.STRING)
+    @Column(name = "team", nullable = false)
     private Team team;
 
-    // which term the position is in
+    // --- position details ---
+
+    // which term the position is in?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "term_id", nullable = false)
     private Term term;
-
-    // --- position details ---
 
     // is the position active?
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
-    // start and end dates of the position
+    // start and end dates of the position.
     @Column(name = "start_date")
     private LocalDate startDate;
 

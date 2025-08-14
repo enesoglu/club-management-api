@@ -1,27 +1,32 @@
 package com.cms.clubmanagementapi.model.role;
 
-import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
-@Entity
-@Table(name = "teams")
-public class Team {
+@RequiredArgsConstructor
+public enum Team {
 
+    EXECUTIVE("Executive Board"),
+/*
+    executive board members have a sub-value
+    for indicating what title they have.
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    see: model/ExecutiveTitle.java
+*/
 
-    // e.g: "Executive Board", "Organization Committee"
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    CREW("Crew"),
+/*
+    crew members have a sub-value for indicating which
+    committee the member is in.
 
-    // e.g: "Ececutive Board -> EXECUTIVE", Organization Comittee -> CREW"
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private MemberRole type;
+    see: model/CrewCommittee.java
+*/
+
+    SUPERVISORY("Supervisory Board"),
+    MEMBER("Member"),
+    VETERAN("Veteran");
+
+    private final String displayName;
+
 }
