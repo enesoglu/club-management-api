@@ -3,16 +3,24 @@ package com.cms.clubmanagementapi.mapper;
 import com.cms.clubmanagementapi.dto.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
-import org.springframework.stereotype.Component;
 
-@Component
-public class ClubMemberMapper {
+import org.mapstruct.Mapper;
+import java.util.List;
 
-    public ClubMember toEntity(CreateClubMemberRequest request) {
-        if (request == null) {
-            return null;
-        }
-        ClubMember member = new ClubMember();
+@Mapper(componentModel = "spring")
+public interface ClubMemberMapper {
+
+    ClubMember toEntity(CreateClubMemberRequest request);
+
+    List<ClubMember> toEntityList(List<CreateClubMemberRequest> members);
+
+    ClubMemberDTO toDTO(ClubMember member);
+
+    List<ClubMemberDTO> toDTOList(List<ClubMember> members);
+
+}
+
+/*     ClubMember member = new ClubMember();
         member.setName(request.getName());
         member.setEmail(request.getEmail());
         member.setPhone(request.getPhone());
@@ -24,13 +32,13 @@ public class ClubMemberMapper {
         member.setPassword(request.getPassword());
 
         if (request.getRole() != null) {
-            member.setRole(request.getRole());
+            //TODO
+            // member.setRole(request.getRole());
         }
+*/
 
-        return member;
-    }
-
-    public ClubMemberDTO toDTO(ClubMember member) {
+/*
+    {
         if (member == null) {
             return null;
         }
@@ -39,7 +47,8 @@ public class ClubMemberMapper {
         dto.setId(member.getId());
         dto.setSchoolNo(member.getSchoolNo());
         dto.setName(member.getName());
-        dto.setRole(member.getRole());
+        //TODO
+        // dto.setRole(member.getRole());
         dto.setEmail(member.getEmail());
         dto.setPhone(member.getPhone());
         dto.setYearOfStudy(member.getYearOfStudy());
@@ -50,4 +59,4 @@ public class ClubMemberMapper {
 
         return dto;
     }
-}
+*/
