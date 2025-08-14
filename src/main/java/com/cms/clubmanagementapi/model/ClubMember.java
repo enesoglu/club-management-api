@@ -3,20 +3,19 @@ package com.cms.clubmanagementapi.model;
 import com.cms.clubmanagementapi.model.role.Position;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = "positions")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "club_members")
-
 public class ClubMember {
 
     @Id

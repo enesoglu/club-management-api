@@ -3,7 +3,8 @@ package com.cms.clubmanagementapi.model.role;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDate;
 
 /**
@@ -11,7 +12,11 @@ import java.time.LocalDate;
  * the answer of "who, in which team, in which term, had this title?"
  */
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = "member")
 @Entity
 @Table(name = "positions")
 public class Position {

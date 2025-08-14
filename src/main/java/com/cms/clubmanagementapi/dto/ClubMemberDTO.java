@@ -17,6 +17,5 @@ public class ClubMemberDTO {
     private String faculty;
     private String department;
     private LocalDate registrationDate;
-    private MemberRole role;
     private MemberStatus membershipStatus;
 }
