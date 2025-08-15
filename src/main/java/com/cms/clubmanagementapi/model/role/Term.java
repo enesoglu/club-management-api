@@ -1,10 +1,8 @@
 package com.cms.clubmanagementapi.model.role;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  *   the table "terms" contains active years of the club.
@@ -27,4 +25,5 @@ public class Term {
 
     @Column(name = "is_active")
     private boolean isActive = false;       // is it the current term
+
 }

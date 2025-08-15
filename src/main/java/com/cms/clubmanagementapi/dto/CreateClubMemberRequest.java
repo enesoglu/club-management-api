@@ -1,12 +1,10 @@
 package com.cms.clubmanagementapi.dto;
 
 import com.cms.clubmanagementapi.model.MemberStatus;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 //  create request dto
-@Getter
-@Setter
+@Data
 public class CreateClubMemberRequest {
 
     private String name;

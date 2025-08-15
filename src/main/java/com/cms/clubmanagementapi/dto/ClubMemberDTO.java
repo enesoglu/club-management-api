@@ -1,8 +1,6 @@
 package com.cms.clubmanagementapi.dto;
 
 import com.cms.clubmanagementapi.model.MemberStatus;
-import com.cms.clubmanagementapi.model.role.Position;
-import com.cms.clubmanagementapi.dto.PositionDTO;
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
