@@ -1,6 +1,9 @@
 package com.cms.clubmanagementapi.dto;
 
-public class CreateTerm {
+import lombok.Data;
+
+@Data
+public class CreateTermDTO {
 
     private String name;
 

@@ -16,5 +16,6 @@ public class PositionDTO {
     private CrewCommittee crewCommittee;
     private ExecutiveTitle executiveTitle;
     private boolean isActive;
+    private TermDTO term;
 
 }

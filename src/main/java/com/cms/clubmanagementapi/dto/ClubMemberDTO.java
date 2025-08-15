@@ -1,7 +1,6 @@
 package com.cms.clubmanagementapi.dto;
 
 import com.cms.clubmanagementapi.model.MemberStatus;
-import com.cms.clubmanagementapi.model.role.Position;
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +18,6 @@ public class ClubMemberDTO {
     private String department;
     private LocalDate registrationDate;
     private MemberStatus membershipStatus;
-    private List<Position> positions;
+    private List<PositionDTO> positions;
 
 }
