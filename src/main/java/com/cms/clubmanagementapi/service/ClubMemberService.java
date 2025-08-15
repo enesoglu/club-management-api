@@ -85,16 +85,16 @@ public class ClubMemberService {
                 newMember.setFaculty(csvRecord.get("faculty"));
                 newMember.setDepartment(csvRecord.get("department"));
                 newMember.setPassword(csvRecord.get("password"));
-                newMember.setMembershipStatus(MemberStatus.ACTIVE); // Varsayılan olarak AKTİF üye
+                // all new members are active by default
+                newMember.setMembershipStatus(MemberStatus.ACTIVE);
 
                 membersToSave.add(newMember);
             }
         }
 
         if (!membersToSave.isEmpty()) {
-            // MapStruct mapper'ını kullanarak DTO listesini Entity listesine çevir
             List<ClubMember> clubMembers = clubMemberMapper.toEntityList(membersToSave);
-            clubMemberRepository.saveAll(clubMembers); // Tüm üyeleri tek seferde kaydet
+            clubMemberRepository.saveAll(clubMembers);
         }
     }
 }
