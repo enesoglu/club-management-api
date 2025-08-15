@@ -61,13 +61,4 @@ public class ClubMember {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Position> positions = new ArrayList<>();
 
-    public void setPositions(List<Position> positions) {
-        if (positions != null) {
-            this.positions.clear();
-            positions.forEach(position -> {
-                position.setMember(this);
-                this.positions.add(position);
-            });
-        }
-    }
 }
