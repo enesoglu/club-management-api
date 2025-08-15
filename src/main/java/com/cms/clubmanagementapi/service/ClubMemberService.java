@@ -45,12 +45,12 @@ public class ClubMemberService {
 
     // get all members
     public List<ClubMemberDTO> findAllMembers() {
-        List<ClubMember> members = clubMemberRepository.findAll();
+        List<ClubMember> members = clubMemberRepository.findAllWithPositionsAndTerms();
         return clubMemberMapper.toDTOList(members);
     }
 
     public ClubMemberDTO findMemberById(long id) {
-        ClubMember member = clubMemberRepository.findById(id)
+        ClubMember member = clubMemberRepository.findByIdWithPositionsAndTerms(id)
                 .orElseThrow(() -> new RuntimeException("Member Not Found"));
         return clubMemberMapper.toDTO(member);
     }

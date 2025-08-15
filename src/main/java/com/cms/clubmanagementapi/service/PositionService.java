@@ -5,16 +5,18 @@ import com.cms.clubmanagementapi.dto.PositionDTO;
 import com.cms.clubmanagementapi.mapper.PositionMapper;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.model.role.Position;
-import com.cms.clubmanagementapi.model.role.Team;
 import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.repository.PositionRepository;
 import com.cms.clubmanagementapi.repository.TermRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PositionService {
@@ -35,6 +37,19 @@ public class PositionService {
         this.positionMapper = positionMapper;
     }
 
+    // find a member's all positions
+    @Transactional(readOnly = true)
+    public List<PositionDTO> getPositions(@PathVariable Long memberId) {
+        List<Position> positions = positionRepository.findAllByMemberIdWithTerm(memberId);
+        return positionMapper.toDTOList(positions);
+    }
+
+    // find a member's active position
+    public PositionDTO getActivePosition(@PathVariable Long memberId){
+        Position activePosition = positionRepository.findActiveByMemberIdWithTerm(memberId);
+        return positionMapper.toDTO(activePosition);
+    }
+
     @Transactional
     public PositionDTO addPositionToMember (Long memberId, CreateClubMemberPosition positionRequest){
 
@@ -43,7 +58,7 @@ public class PositionService {
                 .orElseThrow(()-> new RuntimeException("member not found"));
 
         // find the member's all positions and set to passive (false)
-        List<Position> activePositions = positionRepository.findByMemberAndIsActiveTrue(member);
+        List<Position> activePositions = positionRepository.findAllByMemberIdWithTerm(member.getId());
         for (Position oldPosition : activePositions){
             oldPosition.setActive(false);
             oldPosition.setEndDate(LocalDate.now());
