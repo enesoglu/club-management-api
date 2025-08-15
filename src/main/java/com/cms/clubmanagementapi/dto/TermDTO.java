@@ -6,6 +6,5 @@ import lombok.Data;
 public class TermDTO {
 
     private String name;
-    private boolean isActive;
 
 }
