@@ -15,6 +15,14 @@ public class TermController {
         this.termService = termService;
     }
 
+    // get active term name
+    @GetMapping("/get-active-term")
+    public String getActiveTerm() {
+        Term activeTerm = termService.findByIsActiveTrue()
+                .orElseThrow(()-> new RuntimeException("No Active Term"));
+        return activeTerm.getName();
+    }
+
     // make a term active
     // e.g: PUT, http://localhost:8080/api/terms/5/set-active
     @PostMapping("/{id}/set-active")
