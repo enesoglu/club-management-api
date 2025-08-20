@@ -37,7 +37,7 @@ public class ClubMemberController {
 
     // create member
     @PostMapping
-    public ClubMember createMember(@RequestBody CreateClubMemberRequest clubMember){
+    public ClubMemberDTO createMember(@RequestBody CreateClubMemberRequest clubMember){
         return clubMemberService.createMember(clubMember);
     }
 
