@@ -4,6 +4,7 @@ import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.TermRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
@@ -18,6 +19,10 @@ public class TermService {
 
     public Optional<Term> findByIsActiveTrue() {
         return termRepository.findByIsActiveTrue();
+    }
+
+    public void DeleteById(@PathVariable Long id) {
+        termRepository.deleteById(id);
     }
 
     @Transactional
