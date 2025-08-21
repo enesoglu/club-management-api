@@ -98,6 +98,7 @@ public class PositionService {
                 lastPosition.setActive(true);
 
                 return ("position %d deleted and member's" +
+                positionRepository.deleteById(id);
                         "last position (id: %d) is active now.")
                         .formatted(id, lastPosition.getId());
             }
@@ -115,6 +116,7 @@ public class PositionService {
             addPositionToMember(member.getId(), positionRequest);
 
             return ("position %d deleted and member's" +
+            positionRepository.deleteById(id);
                     "new position is set to \"MEMBER\"")
                     .formatted(id);
         }
