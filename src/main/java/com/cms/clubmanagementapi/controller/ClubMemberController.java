@@ -4,6 +4,7 @@ import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.service.ClubMemberService;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class ClubMemberController {
 
     // create member
     @PostMapping
-    public ClubMemberDTO createMember(@RequestBody CreateClubMemberRequest clubMember){
+    public ClubMemberDTO createMember(@Valid @RequestBody CreateClubMemberRequest clubMember){
         return clubMemberService.createMember(clubMember);
     }
 
