@@ -37,8 +37,9 @@ public class ClubMember {
     @Column(name = "national_id",    nullable = false, unique = true )
     private String nationalId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "year_of_study",  nullable = false                )
-    private String yearOfStudy;
+    private YearOfStudy yearOfStudy;
 
     @Column(name = "faculty")
     private String faculty;
