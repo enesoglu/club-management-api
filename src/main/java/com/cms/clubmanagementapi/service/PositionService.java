@@ -89,21 +89,22 @@ public class PositionService {
     public String deletePosition(@PathVariable long id){
         Position positionToBeDeleted = positionRepository.findById(id);
 
-        // if to be deleted position is active, set last position to active and delete.
-        // if member has only one position, set the position to "MEMBER".
+        // if to be deleted position is active and it's not the only position member has,
+        // set last position to active and delete.
         if ((positionRepository.findAllPositionsByPositionId(id)).size() != 1){
 
             if (positionToBeDeleted.isActive()){
                 Position lastPosition = positionRepository.findLastPositionByPositionId(id);
                 lastPosition.setActive(true);
 
-                return ("position %d deleted and member's" +
                 positionRepository.deleteById(id);
+                return ("position %d deleted and member's " +
                         "last position (id: %d) is active now.")
                         .formatted(id, lastPosition.getId());
             }
         }
 
+        // if member has only one position, set position to "MEMBER".
         else{
             // get the member from position.
             ClubMember member = positionToBeDeleted.getMember();
@@ -115,14 +116,14 @@ public class PositionService {
             // set member's position to "MEMBER".
             addPositionToMember(member.getId(), positionRequest);
 
-            return ("position %d deleted and member's" +
             positionRepository.deleteById(id);
+            return ("position %d deleted and member's " +
                     "new position is set to \"MEMBER\"")
                     .formatted(id);
         }
 
         // delete the position
         positionRepository.deleteById(id);
-        return "error";
+        return "";
     }
 }
