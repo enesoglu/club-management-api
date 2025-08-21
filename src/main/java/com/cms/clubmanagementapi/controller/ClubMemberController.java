@@ -2,7 +2,6 @@ package com.cms.clubmanagementapi.controller;
 
 import com.cms.clubmanagementapi.dto.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
-import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.service.ClubMemberService;
 
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +36,7 @@ public class ClubMemberController {
 
     // create member
     @PostMapping
-    public ClubMember createMember(@RequestBody CreateClubMemberRequest clubMember){
+    public ClubMemberDTO createMember(@RequestBody CreateClubMemberRequest clubMember){
         return clubMemberService.createMember(clubMember);
     }
 

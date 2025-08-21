@@ -56,7 +56,8 @@ public class ClubMemberService {
     }
 
     // create new member
-    public ClubMember createMember(CreateClubMemberRequest member) {
+    @Transactional
+    public ClubMemberDTO createMember(CreateClubMemberRequest member) {
 
         // create a member entity from coming DTO
         ClubMember newMember = clubMemberMapper.toEntity(member);
@@ -78,7 +79,9 @@ public class ClubMemberService {
         newMember.setPositions(List.of(defaultPosition));
 
         //  save the member
-        return clubMemberRepository.save(newMember);
+        ClubMember savedMember = clubMemberRepository.save(newMember);
+
+        return clubMemberMapper.toDTO(savedMember);
 
     }
 

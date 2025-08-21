@@ -21,14 +21,12 @@ public class PositionController {
     // get a member's all positions
     @GetMapping("/members/{memberId}/get-position")
     public List<PositionDTO> getPosition(@PathVariable Long memberId) {
-
         return positionService.getPositions(memberId);
     }
 
     // get a member's active positions
     @GetMapping("/members/{memberId}/get-active-position")
     public PositionDTO getActivePosition(@PathVariable Long memberId) {
-
         return positionService.getActivePosition(memberId);
     }
 
@@ -37,10 +35,16 @@ public class PositionController {
     // BODY: { "team": "EXECUTIVE", "executiveTitle": "PRESIDENT"}
     @PostMapping("/members/{memberId}/set-position")
     public ResponseEntity<PositionDTO> addPosition(@PathVariable("memberId") Long memberId,
-                                                   @RequestBody CreateClubMemberPosition positionRequest) {
-
-    PositionDTO newPositionDTO = positionService.addPositionToMember(memberId, positionRequest);
-    return ResponseEntity.ok(newPositionDTO);
+                                                   @RequestBody CreateClubMemberPosition positionRequest)
+    {
+        PositionDTO newPositionDTO = positionService.addPositionToMember(memberId, positionRequest);
+        return ResponseEntity.ok(newPositionDTO);
     }
 
+    /* delete a position and set the member's position
+    to the last position it had */
+    @DeleteMapping("/members/delete-position/{positionId}")
+    public String deletePosition(@PathVariable Long positionId) {
+        return positionService.deletePosition(positionId);
+    }
 }
