@@ -51,6 +51,12 @@ public class PositionService {
         return positionMapper.toDTO(activePosition);
     }
 
+    public CreateClubMemberPosition createDefaultMemberPositionRequest() {
+        CreateClubMemberPosition positionRequest = new CreateClubMemberPosition();
+        positionRequest.setTeam(MEMBER);
+        return positionRequest;
+    }
+
     @Transactional
     public PositionDTO addPositionToMember (Long memberId, CreateClubMemberPosition positionRequest){
 
@@ -100,10 +106,8 @@ public class PositionService {
 
         // if member has only one position, set it's new position to "MEMBER" then delete it.
         if (totalPositions == 1){
-            CreateClubMemberPosition positionRequest = new CreateClubMemberPosition();
-            positionRequest.setTeam(MEMBER);
 
-            addPositionToMember(memberId, positionRequest);
+            addPositionToMember(memberId, createDefaultMemberPositionRequest());
             positionRepository.deleteById(positionId);
 
             return ("position %d deleted and member's " +
