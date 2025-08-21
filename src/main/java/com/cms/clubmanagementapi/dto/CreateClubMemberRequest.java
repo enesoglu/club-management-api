@@ -17,6 +17,6 @@ public class CreateClubMemberRequest {
     private String yearOfStudy;
     private String password;
     private MemberStatus membershipStatus;
-    private PositionDTO position;
+    private CreateClubMemberPosition position;
 
 }

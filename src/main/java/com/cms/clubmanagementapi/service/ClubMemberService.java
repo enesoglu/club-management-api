@@ -34,13 +34,15 @@ public class ClubMemberService {
     private final ClubMemberRepository clubMemberRepository;
     private final ClubMemberMapper clubMemberMapper;
     private final TermRepository termRepository;
+    private final PositionService positionService;
 
     public ClubMemberService(ClubMemberRepository clubMemberRepository,
                              ClubMemberMapper clubMemberMapper,
-                             TermRepository termRepository) {
+                             TermRepository termRepository, PositionService positionService) {
         this.clubMemberRepository = clubMemberRepository;
         this.clubMemberMapper = clubMemberMapper;
         this.termRepository = termRepository;
+        this.positionService = positionService;
     }
 
     // get all members
@@ -120,6 +122,7 @@ public class ClubMemberService {
                 newMember.setPassword(csvRecord.get("password"));
                 // all new members are active by default
                 newMember.setMembershipStatus(MemberStatus.ACTIVE);
+                newMember.setPosition(positionService.createDefaultMemberPositionRequest());
 
                 membersToSave.add(newMember);
             }
