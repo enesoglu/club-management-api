@@ -9,6 +9,7 @@ import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.repository.PositionRepository;
 import com.cms.clubmanagementapi.repository.TermRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,43 +87,51 @@ public class PositionService {
     }
 
     @Transactional
-    public String deletePosition(@PathVariable long id){
-        Position positionToBeDeleted = positionRepository.findById(id);
+    public String deletePosition(@PathVariable long positionId){
 
-        // if to be deleted position is active, set last position to active and delete.
-        // if member has only one position, set the position to "MEMBER".
-        if ((positionRepository.findAllPositionsByPositionId(id)).size() != 1){
+        Position positionToDelete = positionRepository.findById(positionId)
+                .orElseThrow(() -> new EntityNotFoundException("position not found with id: " + positionId));
 
-            if (positionToBeDeleted.isActive()){
-                Position lastPosition = positionRepository.findLastPositionByPositionId(id);
-                lastPosition.setActive(true);
+        // get member from position
+        ClubMember member = positionToDelete.getMember();
 
-                return ("position %d deleted and member's" +
-                positionRepository.deleteById(id);
-                        "last position (id: %d) is active now.")
-                        .formatted(id, lastPosition.getId());
-            }
-        }
+        long memberId = member.getId();
+        long totalPositions = positionRepository.countByMemberId(memberId);
 
-        else{
-            // get the member from position.
-            ClubMember member = positionToBeDeleted.getMember();
-
-            // create a member position.
+        // if member has only one position, set it's new position to "MEMBER" then delete it.
+        if (totalPositions == 1){
             CreateClubMemberPosition positionRequest = new CreateClubMemberPosition();
             positionRequest.setTeam(MEMBER);
 
-            // set member's position to "MEMBER".
-            addPositionToMember(member.getId(), positionRequest);
+            addPositionToMember(memberId, positionRequest);
+            positionRepository.deleteById(positionId);
 
-            return ("position %d deleted and member's" +
-            positionRepository.deleteById(id);
+            return ("position %d deleted and member's " +
                     "new position is set to \"MEMBER\"")
-                    .formatted(id);
+                    .formatted(positionId);
         }
 
-        // delete the position
-        positionRepository.deleteById(id);
-        return "error";
+        // if to be deleted position is active and it's not the only position member has,
+        // set last position to active then delete it.
+        else if (positionToDelete.isActive()){
+
+            Position lastPosition = positionRepository
+                    .findLastPositionByPositionId(positionId)
+                    .orElseThrow(()-> new IllegalStateException(("could not find the previous position")));
+
+            lastPosition.setActive(true);
+
+            positionRepository.deleteById(positionId);
+            return ("position %d deleted and member's " +
+                    "previous position (id: %d) is active now.")
+                    .formatted(positionId, lastPosition.getId());
+        }
+
+        // if the position is not the only position and not active one
+        else{
+            positionRepository.deleteById(positionId);
+            return ("position %d deleted")
+                    .formatted(positionId);
+        }
     }
 }
