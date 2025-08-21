@@ -43,4 +43,10 @@ public class PositionController {
     return ResponseEntity.ok(newPositionDTO);
     }
 
+    /* delete a position and set the member's position
+    to the last position it had */
+    @DeleteMapping("/members/delete-position/{positionId}")
+    public String deletePosition(@PathVariable Long positionId) {
+        return positionService.deletePosition(positionId);
+    }
 }
