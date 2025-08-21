@@ -37,7 +37,7 @@ public class TermController {
         return ResponseEntity.ok(activeTerm);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete-term/{id}")
     public String deleteTerm(@PathVariable Long id) {
         Optional<Term> term = Optional.ofNullable(termRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No Term by id:" + id)));
