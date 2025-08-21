@@ -21,9 +21,7 @@ public class TermService {
         return termRepository.findByIsActiveTrue();
     }
 
-    public void DeleteById(@PathVariable Long id) {
-        termRepository.deleteById(id);
-    }
+    public void deleteById(@PathVariable Long id) { termRepository.deleteById(id); }
 
     @Transactional
     public Term setActiveTerm(Long termId) {

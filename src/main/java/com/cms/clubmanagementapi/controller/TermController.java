@@ -44,7 +44,7 @@ public class TermController {
 
         String msg = "term" + term.get() + "deleted.";
 
-        termService.DeleteById(id);
+        termService.deleteById(id);
 
         return msg;
     }
