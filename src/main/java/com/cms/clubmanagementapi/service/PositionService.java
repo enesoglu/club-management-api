@@ -1,7 +1,7 @@
 package com.cms.clubmanagementapi.service;
 
-import com.cms.clubmanagementapi.dto.CreateClubMemberPosition;
-import com.cms.clubmanagementapi.dto.PositionDTO;
+import com.cms.clubmanagementapi.dto.request.CreateMemberPositionRequest;
+import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.mapper.PositionMapper;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.model.role.Position;
@@ -51,14 +51,14 @@ public class PositionService {
         return positionMapper.toDTO(activePosition);
     }
 
-    public CreateClubMemberPosition createDefaultMemberPositionRequest() {
-        CreateClubMemberPosition positionRequest = new CreateClubMemberPosition();
+    public CreateMemberPositionRequest createDefaultMemberPositionRequest() {
+        CreateMemberPositionRequest positionRequest = new CreateMemberPositionRequest();
         positionRequest.setTeam(MEMBER);
         return positionRequest;
     }
 
     @Transactional
-    public PositionDTO addPositionToMember (Long memberId, CreateClubMemberPosition positionRequest){
+    public PositionDTO addPositionToMember (Long memberId, CreateMemberPositionRequest positionRequest){
 
         // find the member by id
         ClubMember member = clubMemberRepository.findById(memberId)

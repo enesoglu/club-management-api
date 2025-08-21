@@ -1,6 +1,6 @@
 package com.cms.clubmanagementapi.mapper;
 
-import com.cms.clubmanagementapi.dto.PositionDTO;
+import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.model.role.Position;
 import org.mapstruct.Mapper;
 

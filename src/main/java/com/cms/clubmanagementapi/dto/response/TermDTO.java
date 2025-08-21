@@ -1,4 +1,4 @@
-package com.cms.clubmanagementapi.dto;
+package com.cms.clubmanagementapi.dto.response;
 
 import lombok.Data;
 

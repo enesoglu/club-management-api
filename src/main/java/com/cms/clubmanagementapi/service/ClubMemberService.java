@@ -1,7 +1,7 @@
 package com.cms.clubmanagementapi.service;
 
-import com.cms.clubmanagementapi.dto.ClubMemberDTO;
-import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
+import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
+import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.model.role.Position;

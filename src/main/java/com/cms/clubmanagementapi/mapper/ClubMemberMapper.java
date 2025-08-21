@@ -1,7 +1,7 @@
 package com.cms.clubmanagementapi.mapper;
 
-import com.cms.clubmanagementapi.dto.ClubMemberDTO;
-import com.cms.clubmanagementapi.dto.CreateClubMemberRequest;
+import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
+import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
 
 import org.mapstruct.Mapper;

@@ -1,4 +1,4 @@
-package com.cms.clubmanagementapi.dto;
+package com.cms.clubmanagementapi.dto.response;
 
 import com.cms.clubmanagementapi.model.role.CrewCommittee;
 import com.cms.clubmanagementapi.model.role.ExecutiveTitle;

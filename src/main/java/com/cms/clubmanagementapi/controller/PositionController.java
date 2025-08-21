@@ -1,7 +1,7 @@
 package com.cms.clubmanagementapi.controller;
 
-import com.cms.clubmanagementapi.dto.CreateClubMemberPosition;
-import com.cms.clubmanagementapi.dto.PositionDTO;
+import com.cms.clubmanagementapi.dto.request.CreateMemberPositionRequest;
+import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.service.PositionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +35,7 @@ public class PositionController {
     // BODY: { "team": "EXECUTIVE", "executiveTitle": "PRESIDENT"}
     @PostMapping("/members/{memberId}/set-position")
     public ResponseEntity<PositionDTO> addPosition(@PathVariable("memberId") Long memberId,
-                                                   @RequestBody CreateClubMemberPosition positionRequest)
+                                                   @RequestBody CreateMemberPositionRequest positionRequest)
     {
         PositionDTO newPositionDTO = positionService.addPositionToMember(memberId, positionRequest);
         return ResponseEntity.ok(newPositionDTO);
