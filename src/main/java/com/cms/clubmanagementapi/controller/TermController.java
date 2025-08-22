@@ -8,8 +8,6 @@ import com.cms.clubmanagementapi.service.TermService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/terms")
 public class TermController {
@@ -39,7 +37,7 @@ public class TermController {
 
     @PostMapping("/create-term")
     public ResponseEntity<TermDTO> createTerm(@RequestBody CreateTermRequest term) {
-        return termService.createTerm(term);
+        return ResponseEntity.ok(termService.createTerm(term));
     }
 
     @DeleteMapping("/delete-term/{id}")
