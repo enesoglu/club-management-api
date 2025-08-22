@@ -2,6 +2,7 @@ package com.cms.clubmanagementapi.dto.request;
 
 import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.model.YearOfStudy;
+import com.cms.clubmanagementapi.validator.ValidPosition;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -35,7 +36,7 @@ public class CreateClubMemberRequest {
     @Pattern(regexp = "^[1-9]{1}[0-9]{9}[02468]{1}$", message = "Invalid Turkish National ID")
     private String nationalId;
 
-    @NotBlank(message = "Study Year" + notBlankMessage)
+    @NotNull(message = "Study Year" + notBlankMessage)
     private YearOfStudy yearOfStudy;
 
     @NotBlank(message = "Faculty" + notBlankMessage)
