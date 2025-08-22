@@ -3,6 +3,7 @@ package com.cms.clubmanagementapi.dto.request;
 import com.cms.clubmanagementapi.model.MemberStatus;
 import com.cms.clubmanagementapi.model.YearOfStudy;
 import com.cms.clubmanagementapi.validator.ValidPosition;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -57,6 +58,7 @@ public class CreateClubMemberRequest {
     private MemberStatus membershipStatus;
 
     // if empty or null, it will be set to default (Team.MEMBER)
+    @Valid
     private CreateMemberPositionRequest position;
 
 }
