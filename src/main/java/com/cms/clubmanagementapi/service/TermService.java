@@ -28,6 +28,10 @@ public class TermService {
         return termMapper.toDTO(term);
     }
 
+    public TermDTO createTerm(@RequestBody CreateTermRequest createTermRequest) {
+        Term term = termMapper.toEntity(createTermRequest);
+        termRepository.save(term);
+        return termMapper.toDTO(term);
     }
 
     public void deleteById(@PathVariable Long id) { termRepository.deleteById(id); }

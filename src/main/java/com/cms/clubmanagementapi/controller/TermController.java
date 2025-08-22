@@ -37,6 +37,11 @@ public class TermController {
         return ResponseEntity.ok(activeTerm);
     }
 
+    @PostMapping("/create-term")
+    public ResponseEntity<TermDTO> createTerm(@RequestBody CreateTermRequest term) {
+        return termService.createTerm(term);
+    }
+
     @DeleteMapping("/delete-term/{id}")
     public String deleteTerm(@PathVariable Long id) {
         Term term = termRepository.findById(id)
