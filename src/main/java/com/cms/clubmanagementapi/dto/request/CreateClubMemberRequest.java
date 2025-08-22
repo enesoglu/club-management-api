@@ -51,7 +51,7 @@ public class CreateClubMemberRequest {
     @NotNull(message = "Status" +  notBlankMessage)
     private MemberStatus membershipStatus;
 
-    @NotNull(message = "Position" + notBlankMessage)
+    // if empty or null, it will be set to default (Team.MEMBER)
     private CreateMemberPositionRequest position;
 
 }

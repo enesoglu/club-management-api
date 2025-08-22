@@ -63,29 +63,26 @@ public class ClubMemberService {
 
     // create new member
     @Transactional
-    public ClubMemberDTO createMember(CreateClubMemberRequest member) {
+    public ClubMemberDTO createMember(CreateClubMemberRequest memberRequest) {
 
         // make member's name Title Case
-        member.setName(toTitleCase(member.getName()));
+        memberRequest.setName(toTitleCase(memberRequest.getName()));
 
         // create a member entity from coming DTO
-        ClubMember newMember = clubMemberMapper.toEntity(member);
+        ClubMember newMember = clubMemberMapper.toEntity(memberRequest);
 
         // find and get the active term
         Term activeTerm = termRepository.findByIsActiveTrue()
                 .orElseThrow(() -> new RuntimeException("No Active Term"));
 
-        // set member to the default position -> "MEMBER"
-        Position defaultPosition = new Position();
-        defaultPosition.setMember(newMember);               // assign position to it's owner member
-        defaultPosition.setTerm(activeTerm);                // position's term
-        defaultPosition.setTeam(Team.MEMBER);               // default position member
-        defaultPosition.setStartDate(LocalDate.now());      // position's start date
-        defaultPosition.setActive(true);                    // position is active
-
+        Position newPosition = positionService.createPositionForNewMember(
+                newMember,
+                memberRequest.getPosition(),
+                activeTerm
+        );
 
         // add the position to the member's position list
-        newMember.setPositions(List.of(defaultPosition));
+        newMember.setPositions(List.of(newPosition));
 
         //  save the member
         ClubMember savedMember = clubMemberRepository.save(newMember);

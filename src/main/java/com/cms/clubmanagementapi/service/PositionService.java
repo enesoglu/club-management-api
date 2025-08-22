@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -56,6 +57,30 @@ public class PositionService {
         defaultPosition.setTeam(Team.MEMBER);               // default position member
 
         return defaultPosition;
+    }
+
+    public Position createPositionForNewMember(ClubMember newMember, CreateMemberPositionRequest positionRequest, Term activeTerm) {
+
+        Position newPosition = new Position();
+        newPosition.setMember(newMember);
+        newPosition.setTerm(activeTerm);
+        newPosition.setStartDate(LocalDate.now());
+        newPosition.setActive(true);
+
+        final Set<Team> validTeamsForCopy = Set.of(
+                Team.CREW, Team.EXECUTIVE, Team.VETERAN, Team.SUPERVISORY
+        );
+
+        if (positionRequest != null && validTeamsForCopy.contains(positionRequest.getTeam())) {
+            newPosition.setTeam(positionRequest.getTeam());
+            newPosition.setCrewCommittee(positionRequest.getCrewCommittee());
+            newPosition.setExecutiveTitle(positionRequest.getExecutiveTitle());
+        } else {
+            // if position is null, empty or "Team.MEMBER" position will set to "MEMBER"
+            newPosition.setTeam(Team.MEMBER);
+        }
+
+        return newPosition;
     }
 
     public Position createDefaultPositionForMember(ClubMember member, Term term) {
