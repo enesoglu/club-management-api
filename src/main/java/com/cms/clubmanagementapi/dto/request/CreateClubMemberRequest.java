@@ -20,7 +20,7 @@ public class CreateClubMemberRequest {
     private String name;
 
     @NotBlank(message = "E-Mail" + notBlankMessage)
-    @Email(message = "Please provide a valid e-mail address.")
+    @Pattern(regexp = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Please provide a valid e-mail address.")
     private String email;
 
     @NotBlank(message = "Phone Number" + notBlankMessage)
