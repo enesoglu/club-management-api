@@ -5,6 +5,7 @@ import com.cms.clubmanagementapi.dto.response.TermDTO;
 import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.TermRepository;
 import com.cms.clubmanagementapi.service.TermService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class TermController {
     }
 
     @PostMapping("/create-term")
-    public ResponseEntity<TermDTO> createTerm(@RequestBody CreateTermRequest term) {
+    public ResponseEntity<TermDTO> createTerm(@Valid @RequestBody CreateTermRequest term) {
         return ResponseEntity.ok(termService.createTerm(term));
     }
 
