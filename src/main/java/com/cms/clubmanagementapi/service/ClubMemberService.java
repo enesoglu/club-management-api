@@ -26,7 +26,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClubMemberService {
@@ -61,6 +63,9 @@ public class ClubMemberService {
     // create new member
     @Transactional
     public ClubMemberDTO createMember(CreateClubMemberRequest member) {
+
+        // make member's name Title Case
+        member.setName(toTitleCase(member.getName()));
 
         // create a member entity from coming DTO
         ClubMember newMember = clubMemberMapper.toEntity(member);
@@ -127,6 +132,8 @@ public class ClubMemberService {
         return membersToSave.size();
     }
 
+    // --- helper methods ---
+
     private CreateClubMemberRequest createMemberRequestFromCsv(CSVRecord csvRecord) {
         CreateClubMemberRequest request = new CreateClubMemberRequest();
         request.setName(csvRecord.get("name"));
@@ -140,5 +147,20 @@ public class ClubMemberService {
         request.setPassword(csvRecord.get("password"));
         request.setMembershipStatus(MemberStatus.ACTIVE);
         return request;
+    }
+
+    private String toTitleCase(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        return Arrays.stream(text.split("\\s+"))
+                .map(word -> {
+                    if (word.isEmpty()) {
+                        return "";
+                    }
+                    return Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase();
+                })
+                .collect(Collectors.joining(" "));
     }
 }
