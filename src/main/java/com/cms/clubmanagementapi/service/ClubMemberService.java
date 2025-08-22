@@ -4,6 +4,7 @@ import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.model.MemberStatus;
+import com.cms.clubmanagementapi.model.YearOfStudy;
 import com.cms.clubmanagementapi.model.role.Position;
 import com.cms.clubmanagementapi.model.role.Team;
 import com.cms.clubmanagementapi.model.role.Term;
@@ -141,7 +142,7 @@ public class ClubMemberService {
         request.setPhone(csvRecord.get("phone"));
         request.setSchoolNo(csvRecord.get("schoolNo"));
         request.setNationalId(csvRecord.get("nationalId"));
-        request.setYearOfStudy(csvRecord.get("yearOfStudy"));
+        request.setYearOfStudy(YearOfStudy.valueOf(csvRecord.get("yearOfStudy")));
         request.setFaculty(csvRecord.get("faculty"));
         request.setDepartment(csvRecord.get("department"));
         request.setPassword(csvRecord.get("password"));
