@@ -13,6 +13,10 @@ public class CreateClubMemberRequest {
 
     @NotBlank(message = "Name" + notBlankMessage)
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
+    @Pattern(
+            regexp = "^([a-zA-ZçÇğĞıİöÖşŞüÜ]+)(\\s[a-zA-ZçÇğĞıİöÖşŞüÜ]+)*$",
+            message = "Name must only contain letters and single spaces between words."
+    )
     private String name;
 
     @NotBlank(message = "E-Mail" + notBlankMessage)
