@@ -1,6 +1,7 @@
 package com.cms.clubmanagementapi.dto.request;
 
 import com.cms.clubmanagementapi.model.MemberStatus;
+import com.cms.clubmanagementapi.model.YearOfStudy;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -31,7 +32,7 @@ public class CreateClubMemberRequest {
     private String nationalId;
 
     @NotBlank(message = "Study Year" + notBlankMessage)
-    private String yearOfStudy;
+    private YearOfStudy yearOfStudy;
 
     @NotBlank(message = "Faculty" + notBlankMessage)
     private String faculty;
