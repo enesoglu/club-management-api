@@ -5,6 +5,7 @@ import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.mapper.PositionMapper;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.model.role.Position;
+import com.cms.clubmanagementapi.model.role.Team;
 import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.repository.PositionRepository;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.cms.clubmanagementapi.model.role.Team.MEMBER;
 
 @Service
 public class PositionService {
@@ -51,10 +51,21 @@ public class PositionService {
         return positionMapper.toDTO(activePosition);
     }
 
-    public CreateMemberPositionRequest createDefaultMemberPositionRequest() {
-        CreateMemberPositionRequest positionRequest = new CreateMemberPositionRequest();
-        positionRequest.setTeam(MEMBER);
-        return positionRequest;
+    public CreateMemberPositionRequest createDefaultMemberPosition() {
+        CreateMemberPositionRequest defaultPosition = new CreateMemberPositionRequest();
+        defaultPosition.setTeam(Team.MEMBER);               // default position member
+
+        return defaultPosition;
+    }
+
+    public Position createDefaultPositionForMember(ClubMember member, Term term) {
+        Position position = new Position();
+        position.setMember(member);
+        position.setTerm(term);
+        position.setTeam(Team.MEMBER);
+        position.setStartDate(LocalDate.now());
+        position.setActive(true);
+        return position;
     }
 
     @Transactional
@@ -107,7 +118,7 @@ public class PositionService {
         // if member has only one position, set it's new position to "MEMBER" then delete it.
         if (totalPositions == 1){
 
-            addPositionToMember(memberId, createDefaultMemberPositionRequest());
+            addPositionToMember(memberId, createDefaultMemberPosition());
             positionRepository.deleteById(positionId);
 
             return ("position %d deleted and member's " +

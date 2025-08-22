@@ -38,7 +38,8 @@ public class ClubMemberService {
 
     public ClubMemberService(ClubMemberRepository clubMemberRepository,
                              ClubMemberMapper clubMemberMapper,
-                             TermRepository termRepository, PositionService positionService) {
+                             TermRepository termRepository,
+                             PositionService positionService) {
         this.clubMemberRepository = clubMemberRepository;
         this.clubMemberMapper = clubMemberMapper;
         this.termRepository = termRepository;
@@ -94,7 +95,7 @@ public class ClubMemberService {
 
     // create new members from csv file
     @Transactional
-    public void saveMembersFromCsv(MultipartFile file) throws IOException {
+    public long saveMembersFromCsv(MultipartFile file) throws IOException {
 
         final CSVFormat format = CSVFormat.DEFAULT.builder()
                 .setHeader()
@@ -103,34 +104,41 @@ public class ClubMemberService {
                 .setTrim(true)
                 .build();
 
-        List<CreateClubMemberRequest> membersToSave = new ArrayList<>();
+        List<ClubMember> membersToSave = new ArrayList<>();
+        Term activeTerm = termRepository.findByIsActiveTrue()
+                .orElseThrow(() -> new RuntimeException("No Active Term"));
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(reader, format)) {
 
             for (CSVRecord csvRecord : csvParser) {
-                CreateClubMemberRequest newMember = new CreateClubMemberRequest();
+                CreateClubMemberRequest newMemberRequest = createMemberRequestFromCsv(csvRecord);
+                ClubMember newMember =  clubMemberMapper.toEntity(newMemberRequest);
 
-                newMember.setName(csvRecord.get("name"));
-                newMember.setEmail(csvRecord.get("email"));
-                newMember.setPhone(csvRecord.get("phone"));
-                newMember.setSchoolNo(csvRecord.get("schoolNo"));
-                newMember.setNationalId(csvRecord.get("nationalId"));
-                newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
-                newMember.setFaculty(csvRecord.get("faculty"));
-                newMember.setDepartment(csvRecord.get("department"));
-                newMember.setPassword(csvRecord.get("password"));
-                // all new members are active by default
-                newMember.setMembershipStatus(MemberStatus.ACTIVE);
-                newMember.setPosition(positionService.createDefaultMemberPositionRequest());
+                Position defaultPosition = positionService.createDefaultPositionForMember(newMember, activeTerm);
+                newMember.setPositions(List.of(defaultPosition));
 
                 membersToSave.add(newMember);
             }
         }
-
         if (!membersToSave.isEmpty()) {
-            List<ClubMember> clubMembers = clubMemberMapper.toEntityList(membersToSave);
-            clubMemberRepository.saveAll(clubMembers);
+            clubMemberRepository.saveAll(membersToSave);
         }
+        return membersToSave.size();
+    }
+
+    private CreateClubMemberRequest createMemberRequestFromCsv(CSVRecord csvRecord) {
+        CreateClubMemberRequest request = new CreateClubMemberRequest();
+        request.setName(csvRecord.get("name"));
+        request.setEmail(csvRecord.get("email"));
+        request.setPhone(csvRecord.get("phone"));
+        request.setSchoolNo(csvRecord.get("schoolNo"));
+        request.setNationalId(csvRecord.get("nationalId"));
+        request.setYearOfStudy(csvRecord.get("yearOfStudy"));
+        request.setFaculty(csvRecord.get("faculty"));
+        request.setDepartment(csvRecord.get("department"));
+        request.setPassword(csvRecord.get("password"));
+        request.setMembershipStatus(MemberStatus.ACTIVE);
+        return request;
     }
 }

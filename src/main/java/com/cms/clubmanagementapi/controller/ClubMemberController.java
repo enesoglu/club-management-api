@@ -48,14 +48,15 @@ public class ClubMemberController {
         return (id + " deleted.");
     }
 
+    // create members via csv file
     @PostMapping("/import-csv")
     public ResponseEntity<String> importMembersFromCsv(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a \".csv\" file!");
         }
         try {
-            clubMemberService.saveMembersFromCsv(file);
-            return ResponseEntity.ok().body("Members imported successfully!");
+            long memberCount = clubMemberService.saveMembersFromCsv(file);
+            return ResponseEntity.ok().body(memberCount + " members imported successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error while parsing file" + e.getMessage());
