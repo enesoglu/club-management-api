@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class CreateClubMemberRequest {
 
-    final String notBlankMessage = " cannot be blank.";
+    private static final String notBlankMessage = " cannot be blank.";
 
     @NotBlank(message = "Name" + notBlankMessage)
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
