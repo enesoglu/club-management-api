@@ -3,6 +3,7 @@ package com.cms.clubmanagementapi.controller;
 import com.cms.clubmanagementapi.dto.request.CreateMemberPositionRequest;
 import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.service.PositionService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,8 @@ public class PositionController {
     // e.g: POST, http://localhost:8080/api/members/1/set-position
     // BODY: { "team": "EXECUTIVE", "executiveTitle": "PRESIDENT"}
     @PostMapping("/members/{memberId}/set-position")
-    public ResponseEntity<PositionDTO> addPosition(@PathVariable("memberId") Long memberId,
-                                                   @RequestBody CreateMemberPositionRequest positionRequest)
+    public ResponseEntity<PositionDTO> addPosition(@Valid @RequestBody CreateMemberPositionRequest positionRequest,
+                                                   @PathVariable("memberId") Long memberId)
     {
         PositionDTO newPositionDTO = positionService.addPositionToMember(memberId, positionRequest);
         return ResponseEntity.ok(newPositionDTO);

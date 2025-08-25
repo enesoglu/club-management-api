@@ -4,6 +4,7 @@ import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
 import com.cms.clubmanagementapi.model.MemberStatus;
+import com.cms.clubmanagementapi.model.YearOfStudy;
 import com.cms.clubmanagementapi.model.role.Position;
 import com.cms.clubmanagementapi.model.role.Team;
 import com.cms.clubmanagementapi.model.role.Term;
@@ -26,7 +27,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClubMemberService {
@@ -38,7 +41,8 @@ public class ClubMemberService {
 
     public ClubMemberService(ClubMemberRepository clubMemberRepository,
                              ClubMemberMapper clubMemberMapper,
-                             TermRepository termRepository, PositionService positionService) {
+                             TermRepository termRepository,
+                             PositionService positionService) {
         this.clubMemberRepository = clubMemberRepository;
         this.clubMemberMapper = clubMemberMapper;
         this.termRepository = termRepository;
@@ -59,26 +63,26 @@ public class ClubMemberService {
 
     // create new member
     @Transactional
-    public ClubMemberDTO createMember(CreateClubMemberRequest member) {
+    public ClubMemberDTO createMember(CreateClubMemberRequest memberRequest) {
+
+        // make member's name Title Case
+        memberRequest.setName(toTitleCase(memberRequest.getName()));
 
         // create a member entity from coming DTO
-        ClubMember newMember = clubMemberMapper.toEntity(member);
+        ClubMember newMember = clubMemberMapper.toEntity(memberRequest);
 
         // find and get the active term
         Term activeTerm = termRepository.findByIsActiveTrue()
                 .orElseThrow(() -> new RuntimeException("No Active Term"));
 
-        // set member to the default position -> "MEMBER"
-        Position defaultPosition = new Position();
-        defaultPosition.setMember(newMember);               // assign position to it's owner member
-        defaultPosition.setTerm(activeTerm);                // position's term
-        defaultPosition.setTeam(Team.MEMBER);               // default position member
-        defaultPosition.setStartDate(LocalDate.now());      // position's start date
-        defaultPosition.setActive(true);                    // position is active
-
+        Position newPosition = positionService.createPositionForNewMember(
+                newMember,
+                memberRequest.getPosition(),
+                activeTerm
+        );
 
         // add the position to the member's position list
-        newMember.setPositions(List.of(defaultPosition));
+        newMember.setPositions(List.of(newPosition));
 
         //  save the member
         ClubMember savedMember = clubMemberRepository.save(newMember);
@@ -94,7 +98,7 @@ public class ClubMemberService {
 
     // create new members from csv file
     @Transactional
-    public void saveMembersFromCsv(MultipartFile file) throws IOException {
+    public long saveMembersFromCsv(MultipartFile file) throws IOException {
 
         final CSVFormat format = CSVFormat.DEFAULT.builder()
                 .setHeader()
@@ -103,34 +107,58 @@ public class ClubMemberService {
                 .setTrim(true)
                 .build();
 
-        List<CreateClubMemberRequest> membersToSave = new ArrayList<>();
+        List<ClubMember> membersToSave = new ArrayList<>();
+        Term activeTerm = termRepository.findByIsActiveTrue()
+                .orElseThrow(() -> new RuntimeException("No Active Term"));
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(reader, format)) {
 
             for (CSVRecord csvRecord : csvParser) {
-                CreateClubMemberRequest newMember = new CreateClubMemberRequest();
+                CreateClubMemberRequest newMemberRequest = createMemberRequestFromCsv(csvRecord);
+                ClubMember newMember =  clubMemberMapper.toEntity(newMemberRequest);
 
-                newMember.setName(csvRecord.get("name"));
-                newMember.setEmail(csvRecord.get("email"));
-                newMember.setPhone(csvRecord.get("phone"));
-                newMember.setSchoolNo(csvRecord.get("schoolNo"));
-                newMember.setNationalId(csvRecord.get("nationalId"));
-                newMember.setYearOfStudy(csvRecord.get("yearOfStudy"));
-                newMember.setFaculty(csvRecord.get("faculty"));
-                newMember.setDepartment(csvRecord.get("department"));
-                newMember.setPassword(csvRecord.get("password"));
-                // all new members are active by default
-                newMember.setMembershipStatus(MemberStatus.ACTIVE);
-                newMember.setPosition(positionService.createDefaultMemberPositionRequest());
+                Position defaultPosition = positionService.createDefaultPositionForMember(newMember, activeTerm);
+                newMember.setPositions(List.of(defaultPosition));
 
                 membersToSave.add(newMember);
             }
         }
-
         if (!membersToSave.isEmpty()) {
-            List<ClubMember> clubMembers = clubMemberMapper.toEntityList(membersToSave);
-            clubMemberRepository.saveAll(clubMembers);
+            clubMemberRepository.saveAll(membersToSave);
         }
+        return membersToSave.size();
+    }
+
+    // --- helper methods ---
+
+    private CreateClubMemberRequest createMemberRequestFromCsv(CSVRecord csvRecord) {
+        CreateClubMemberRequest request = new CreateClubMemberRequest();
+        request.setName(csvRecord.get("name"));
+        request.setEmail(csvRecord.get("email"));
+        request.setPhone(csvRecord.get("phone"));
+        request.setSchoolNo(csvRecord.get("schoolNo"));
+        request.setNationalId(csvRecord.get("nationalId"));
+        request.setYearOfStudy(YearOfStudy.valueOf(csvRecord.get("yearOfStudy")));
+        request.setFaculty(csvRecord.get("faculty"));
+        request.setDepartment(csvRecord.get("department"));
+        request.setPassword(csvRecord.get("password"));
+        request.setMembershipStatus(MemberStatus.ACTIVE);
+        return request;
+    }
+
+    private String toTitleCase(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        return Arrays.stream(text.split("\\s+"))
+                .map(word -> {
+                    if (word.isEmpty()) {
+                        return "";
+                    }
+                    return Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase();
+                })
+                .collect(Collectors.joining(" "));
     }
 }

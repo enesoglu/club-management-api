@@ -4,6 +4,7 @@ import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.service.ClubMemberService;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class ClubMemberController {
 
     // create member
     @PostMapping
-    public ClubMemberDTO createMember(@RequestBody CreateClubMemberRequest clubMember){
+    public ClubMemberDTO createMember(@Valid @RequestBody CreateClubMemberRequest clubMember){
         return clubMemberService.createMember(clubMember);
     }
 
@@ -47,14 +48,15 @@ public class ClubMemberController {
         return (id + " deleted.");
     }
 
+    // create members via csv file
     @PostMapping("/import-csv")
     public ResponseEntity<String> importMembersFromCsv(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please select a \".csv\" file!");
         }
         try {
-            clubMemberService.saveMembersFromCsv(file);
-            return ResponseEntity.ok().body("Members imported successfully!");
+            long memberCount = clubMemberService.saveMembersFromCsv(file);
+            return ResponseEntity.ok().body(memberCount + " members imported successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error while parsing file" + e.getMessage());
