@@ -16,28 +16,63 @@ public class PositionValidator implements ConstraintValidator<ValidPosition, Cre
         }
 
         Team team = request.getTeam();
+        boolean isValid = true;
 
-        // if team is EXECUTIVE, executiveTitle cannot be blank
-        if (team == Team.EXECUTIVE) {
-            if (request.getExecutiveTitle() == null) {
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate("Executive Title must be specified for the Executive Board.")
-                        .addPropertyNode("executiveTitle")
-                        .addConstraintViolation();
-                return false;
-            }
-        }
+        switch (team) {
 
-        // if team is CREW, crewCommittee cannot be blank
-        else if (team == Team.CREW) {
-            if (request.getCrewCommittee() == null) {
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate("Crew Committee must be specified for the CREW")
-                        .addPropertyNode("crewCommittee")
-                        .addConstraintViolation();
-                return false;
-            }
+            // if team is EXECUTIVE, executiveTitle cannot be blank
+            // and crewCommittee must be blank
+            case EXECUTIVE:
+                if (request.getExecutiveTitle() == null) {
+                    isValid = false;
+                    context.buildConstraintViolationWithTemplate("Executive Title must be specified for the Executive Board.")
+                            .addPropertyNode("executiveTitle")
+                            .addConstraintViolation();
+                }
+                if (request.getCrewCommittee() != null) {
+                    isValid = false;
+                    context.buildConstraintViolationWithTemplate("Crew Committee must be null for the Executive Board.")
+                            .addPropertyNode("crewCommittee")
+                            .addConstraintViolation();
+                }
+                break;
+
+            // if team is CREW, crewCommittee cannot be blank
+            // and executiveTitle must be blank
+            case CREW:
+                if (request.getCrewCommittee() == null) {
+                    isValid = false;
+                    context.buildConstraintViolationWithTemplate("Crew Committee must be specified for the CREW.")
+                            .addPropertyNode("crewCommittee")
+                            .addConstraintViolation();
+                }
+                if (request.getExecutiveTitle() != null) {
+                    isValid = false;
+                    context.buildConstraintViolationWithTemplate("Executive Title must be null for the CREW.")
+                            .addPropertyNode("executiveTitle")
+                            .addConstraintViolation();
+                }
+                break;
+
+            // other Teams like VETERAN, MEMBER, SUPERVISORY.
+            case SUPERVISORY:
+            case MEMBER:
+            case VETERAN:
+                if (request.getExecutiveTitle() != null) {
+                    isValid = false;
+                    context.buildConstraintViolationWithTemplate("Executive Title must be null for %s.".formatted(request.getTeam()))
+                            .addPropertyNode("executiveTitle")
+                            .addConstraintViolation();
+                }
+                if (request.getCrewCommittee() != null) {
+                    isValid = false;
+                    context.buildConstraintViolationWithTemplate("Crew Committee must be null for %s.".formatted(request.getTeam()))
+                            .addPropertyNode("crewCommittee")
+                            .addConstraintViolation();
+                }
+                break;
         }
-        return true;    // there is no third option (i hope)
+        return isValid;
     }
+
 }

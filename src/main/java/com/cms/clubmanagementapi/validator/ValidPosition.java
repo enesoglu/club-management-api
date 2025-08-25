@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = PositionValidator.class)
 public @interface ValidPosition {
 
-    String message() default "Invalid position details for the selected team.";
-
+    String message() default "Invalid position details.";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
