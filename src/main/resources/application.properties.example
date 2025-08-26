@@ -1,0 +1,13 @@
+# --- application.properties file ---
+
+spring.application.name=club-management-api
+
+# PostgreSQL Database Settings
+spring.datasource.url=jdbc:postgresql://localhost:5432/club_members_db
+spring.datasource.username=postgres
+spring.datasource.password=1234
+
+# JPA ve Hibernate Settings
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
