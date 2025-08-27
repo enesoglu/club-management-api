@@ -12,6 +12,7 @@ import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.mapper.ClubMemberMapper;
 import com.cms.clubmanagementapi.repository.TermRepository;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,15 +39,18 @@ public class ClubMemberService {
     private final ClubMemberMapper clubMemberMapper;
     private final TermRepository termRepository;
     private final PositionService positionService;
+    private final PasswordEncoder passwordEncoder;
 
     public ClubMemberService(ClubMemberRepository clubMemberRepository,
                              ClubMemberMapper clubMemberMapper,
                              TermRepository termRepository,
-                             PositionService positionService) {
+                             PositionService positionService,
+                             PasswordEncoder passwordEncoder) {
         this.clubMemberRepository = clubMemberRepository;
         this.clubMemberMapper = clubMemberMapper;
         this.termRepository = termRepository;
         this.positionService = positionService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // get all members
@@ -67,6 +71,9 @@ public class ClubMemberService {
 
         // make member's name Title Case
         memberRequest.setName(toTitleCase(memberRequest.getName()));
+
+        // encode the password
+        encodePasswordForMember(memberRequest);
 
         // create a member entity from coming DTO
         ClubMember newMember = clubMemberMapper.toEntity(memberRequest);
@@ -116,6 +123,8 @@ public class ClubMemberService {
 
             for (CSVRecord csvRecord : csvParser) {
                 CreateClubMemberRequest newMemberRequest = createMemberRequestFromCsv(csvRecord);
+
+                encodePasswordForMember(newMemberRequest);
                 ClubMember newMember =  clubMemberMapper.toEntity(newMemberRequest);
 
                 Position defaultPosition = positionService.createDefaultPositionForMember(newMember, activeTerm);
@@ -160,5 +169,12 @@ public class ClubMemberService {
                     return Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase();
                 })
                 .collect(Collectors.joining(" "));
+    }
+
+    private void encodePasswordForMember(CreateClubMemberRequest member) {
+        String rawPassword = member.getPassword();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        member.setPassword(encodedPassword);
+
     }
 }
