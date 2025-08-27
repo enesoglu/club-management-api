@@ -21,4 +21,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long>{
             "LEFT JOIN FETCH cm.positions p LEFT JOIN FETCH p.term")
     List<ClubMember> findAllWithPositionsAndTerms();
 
+    Optional<ClubMember> findByEmail(String email);
+
 }

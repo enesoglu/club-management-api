@@ -12,7 +12,7 @@ public enum Team {
     executive board members have a sub-value
     for indicating what title they have.
 
-    see: model/ExecutiveTitle.java
+    see: model/role/ExecutiveTitle.java
 */
 
     CREW("Crew"),
@@ -20,7 +20,7 @@ public enum Team {
     crew members have a sub-value for indicating which
     committee the member is in.
 
-    see: model/CrewCommittee.java
+    see: model/role/CrewCommittee.java
 */
 
     SUPERVISORY("Supervisory Board"),
