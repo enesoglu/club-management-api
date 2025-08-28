@@ -29,13 +29,15 @@ public class ClubMemberController {
     }
 
     // get member by id
-    @GetMapping("/{id}")
+    @GetMapping("/findById/{id}")
     public ResponseEntity<ClubMemberDTO> findMemberById(@PathVariable Long id){
         ClubMemberDTO memberDTO = clubMemberService.findMemberById(id);
         return ResponseEntity.ok(memberDTO);
     }
 
     // get member by id
+    @GetMapping("/findByEmail/{email}")
+    public ResponseEntity<ClubMemberDTO> findMemberByEmail(@PathVariable String email){
         ClubMemberDTO memberDTO = clubMemberService.findMemberByEmail(email);
         return ResponseEntity.ok(memberDTO);
     }

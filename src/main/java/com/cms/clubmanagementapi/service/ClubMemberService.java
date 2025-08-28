@@ -57,6 +57,7 @@ public class ClubMemberService {
         return clubMemberMapper.toDTOList(members);
     }
 
+    // find member by id
     public ClubMemberDTO findMemberById(long id) {
         ClubMember member = clubMemberRepository.findByIdWithPositionsAndTerms(id)
                 .orElseThrow(() -> new RuntimeException("Member Not Found"));
