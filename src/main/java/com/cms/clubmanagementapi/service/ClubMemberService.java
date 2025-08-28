@@ -63,6 +63,13 @@ public class ClubMemberService {
         return clubMemberMapper.toDTO(member);
     }
 
+    // find member by email
+    public ClubMemberDTO findMemberByEmail(String email) {
+        ClubMember member = clubMemberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
+        return clubMemberMapper.toDTO(member);
+    }
+
     // create new member
     @Transactional
     public ClubMemberDTO createMember(CreateClubMemberRequest memberRequest) {

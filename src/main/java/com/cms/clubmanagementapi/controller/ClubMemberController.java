@@ -35,6 +35,11 @@ public class ClubMemberController {
         return ResponseEntity.ok(memberDTO);
     }
 
+    // get member by id
+        ClubMemberDTO memberDTO = clubMemberService.findMemberByEmail(email);
+        return ResponseEntity.ok(memberDTO);
+    }
+
     // create member
     @PostMapping
     public ClubMemberDTO createMember(@Valid @RequestBody CreateClubMemberRequest clubMember){
