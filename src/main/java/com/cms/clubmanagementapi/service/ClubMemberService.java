@@ -1,5 +1,6 @@
 package com.cms.clubmanagementapi.service;
 
+import com.cms.clubmanagementapi.dto.request.UpdateClubMemberRequest;
 import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.model.ClubMember;
@@ -107,6 +108,25 @@ public class ClubMemberService {
     // delete a member
     public void deleteMember(@PathVariable Long id) {
         clubMemberRepository.deleteById(id);
+    }
+
+    // update member
+    public ClubMemberDTO updateMember(long id, UpdateClubMemberRequest memberRequest) {
+        ClubMember existingMember = clubMemberRepository.findById(id)
+                                         .orElseThrow(() -> new RuntimeException("Member Not Found"));
+
+        existingMember.setName(toTitleCase(memberRequest.getName()));
+        existingMember.setEmail(memberRequest.getEmail());
+        existingMember.setPhone(memberRequest.getPhone());
+        existingMember.setSchoolNo(memberRequest.getSchoolNo());
+        existingMember.setYearOfStudy(memberRequest.getYearOfStudy());
+        existingMember.setFaculty(memberRequest.getFaculty());
+        existingMember.setDepartment(memberRequest.getDepartment());
+        existingMember.setMembershipStatus(memberRequest.getMembershipStatus());
+
+        ClubMember updatedMember = clubMemberRepository.save(existingMember);
+
+        return clubMemberMapper.toDTO(updatedMember);
     }
 
     // create new members from csv file

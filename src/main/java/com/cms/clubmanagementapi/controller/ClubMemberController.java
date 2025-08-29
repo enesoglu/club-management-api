@@ -1,5 +1,6 @@
 package com.cms.clubmanagementapi.controller;
 
+import com.cms.clubmanagementapi.dto.request.UpdateClubMemberRequest;
 import com.cms.clubmanagementapi.dto.response.ClubMemberDTO;
 import com.cms.clubmanagementapi.dto.request.CreateClubMemberRequest;
 import com.cms.clubmanagementapi.service.ClubMemberService;
@@ -53,6 +54,13 @@ public class ClubMemberController {
     public String deleteMember(@PathVariable Long id){
         clubMemberService.deleteMember(id);
         return (id + " deleted.");
+    }
+
+    // update member
+    @PutMapping("/{id}")
+    public ResponseEntity<ClubMemberDTO> updateMember(@PathVariable long id, @Valid @RequestBody UpdateClubMemberRequest clubMember){
+        ClubMemberDTO updatedMember = clubMemberService.updateMember(id, clubMember);
+        return ResponseEntity.ok(updatedMember);
     }
 
     // create members via csv file
