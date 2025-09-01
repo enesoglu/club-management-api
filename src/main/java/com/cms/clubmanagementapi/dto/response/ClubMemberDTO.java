@@ -14,6 +14,7 @@ public class ClubMemberDTO {
     private String email;
     private String phone;
     private String yearOfStudy;
+    private String nationalId;
     private String faculty;
     private String department;
     private LocalDate registrationDate;
