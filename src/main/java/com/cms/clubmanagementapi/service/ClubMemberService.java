@@ -123,6 +123,7 @@ public class ClubMemberService {
         existingMember.setFaculty(memberRequest.getFaculty());
         existingMember.setDepartment(memberRequest.getDepartment());
         existingMember.setMembershipStatus(memberRequest.getMembershipStatus());
+        existingMember.setPassword(passwordEncoder.encode(memberRequest.getPassword()));
 
         ClubMember updatedMember = clubMemberRepository.save(existingMember);
 

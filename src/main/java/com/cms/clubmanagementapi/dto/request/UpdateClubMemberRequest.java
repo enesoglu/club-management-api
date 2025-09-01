@@ -15,4 +15,5 @@ public class UpdateClubMemberRequest {
     private String faculty;
     private String department;
     private MemberStatus membershipStatus;
+    private String password;
 }
