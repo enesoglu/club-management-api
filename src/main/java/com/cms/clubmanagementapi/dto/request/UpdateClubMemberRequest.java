@@ -12,6 +12,7 @@ public class UpdateClubMemberRequest {
     private String phone;
     private String schoolNo;
     private YearOfStudy yearOfStudy;
+    private String nationalId;
     private String faculty;
     private String department;
     private MemberStatus membershipStatus;
