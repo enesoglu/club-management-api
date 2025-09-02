@@ -123,7 +123,14 @@ public class ClubMemberService {
         existingMember.setFaculty(memberRequest.getFaculty());
         existingMember.setDepartment(memberRequest.getDepartment());
         existingMember.setMembershipStatus(memberRequest.getMembershipStatus());
-        existingMember.setPassword(passwordEncoder.encode(memberRequest.getPassword()));
+
+        // The password field in the DTO is optional. We only update the member's password
+        // if a new one is explicitly provided. This prevents accidentally erasing the existing
+        // password or exceptions when updating other fields.
+        String newPassword = memberRequest.getPassword();
+        if (newPassword != null && !newPassword.isBlank()) {
+            existingMember.setPassword(passwordEncoder.encode(newPassword));
+        }
 
         ClubMember updatedMember = clubMemberRepository.save(existingMember);
 
