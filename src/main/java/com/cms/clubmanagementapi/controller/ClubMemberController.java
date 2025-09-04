@@ -36,7 +36,7 @@ public class ClubMemberController {
         return ResponseEntity.ok(memberDTO);
     }
 
-    // get member by id
+    // get member by email
     @GetMapping("/findByEmail/{email}")
     public ResponseEntity<ClubMemberDTO> findMemberByEmail(@PathVariable String email){
         ClubMemberDTO memberDTO = clubMemberService.findMemberByEmail(email);
