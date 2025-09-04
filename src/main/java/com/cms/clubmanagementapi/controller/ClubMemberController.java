@@ -50,14 +50,14 @@ public class ClubMemberController {
     }
 
     // delete member
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteById/{id}")
     public String deleteMember(@PathVariable Long id){
         clubMemberService.deleteMember(id);
         return (id + " deleted.");
     }
 
     // update member
-    @PutMapping("/{id}")
+    @PutMapping("/updateById/{id}")
     public ResponseEntity<ClubMemberDTO> updateMember(@PathVariable long id, @Valid @RequestBody UpdateClubMemberRequest clubMember){
         ClubMemberDTO updatedMember = clubMemberService.updateMember(id, clubMember);
         return ResponseEntity.ok(updatedMember);
