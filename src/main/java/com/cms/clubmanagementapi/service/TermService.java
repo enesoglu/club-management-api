@@ -1,6 +1,7 @@
 package com.cms.clubmanagementapi.service;
 
 import com.cms.clubmanagementapi.dto.request.CreateTermRequest;
+import com.cms.clubmanagementapi.dto.request.UpdateTermRequest;
 import com.cms.clubmanagementapi.dto.response.TermDTO;
 import com.cms.clubmanagementapi.mapper.TermMapper;
 import com.cms.clubmanagementapi.model.role.Term;
@@ -53,5 +54,15 @@ public class TermService {
         newActiveTerm.setActive(true);
         termRepository.save(newActiveTerm);
         return termMapper.toDTO(newActiveTerm);
+    }
+
+    public TermDTO updateTerm(long termId, @RequestBody UpdateTermRequest termRequest) {
+        Term existingTerm = termRepository.findById(termId)
+                .orElseThrow(() -> new EntityNotFoundException("Term not found with id: " + termId));
+
+        existingTerm.setName(termRequest.getName());
+
+        Term updatedTerm = termRepository.save(existingTerm);
+        return  termMapper.toDTO(updatedTerm);
     }
 }

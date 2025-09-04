@@ -12,4 +12,6 @@ public interface TermRepository extends JpaRepository<Term, Long> {
     // finds the term with "isActive = true"
     Optional<Term> findByIsActiveTrue();
 
+    Optional<Term> findByName(String name);
+
 }

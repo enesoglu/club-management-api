@@ -1,6 +1,7 @@
 package com.cms.clubmanagementapi.controller;
 
 import com.cms.clubmanagementapi.dto.request.CreateTermRequest;
+import com.cms.clubmanagementapi.dto.request.UpdateTermRequest;
 import com.cms.clubmanagementapi.dto.response.TermDTO;
 import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.TermRepository;
@@ -49,4 +50,12 @@ public class TermController {
         termService.deleteById(id);
         return "term " + term.getName() + " deleted.";
     }
+
+    // update term
+    @PutMapping("/update-term/{id}")
+    public ResponseEntity<TermDTO> updateTerm(@PathVariable long id, @RequestBody UpdateTermRequest termRequest){
+        TermDTO updatedTerm = termService.updateTerm(id, termRequest);
+        return ResponseEntity.ok(updatedTerm);
+    }
+
 }
