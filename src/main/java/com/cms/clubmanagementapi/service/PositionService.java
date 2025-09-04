@@ -1,6 +1,7 @@
 package com.cms.clubmanagementapi.service;
 
 import com.cms.clubmanagementapi.dto.request.CreateMemberPositionRequest;
+import com.cms.clubmanagementapi.dto.request.UpdateMemberPositionRequest;
 import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.mapper.PositionMapper;
 import com.cms.clubmanagementapi.model.ClubMember;
@@ -173,5 +174,23 @@ public class PositionService {
             return ("position %d deleted")
                     .formatted(positionId);
         }
+    }
+
+    public PositionDTO updatePosition(long positionId, UpdateMemberPositionRequest positionRequest){
+        Position existingPosition = positionRepository.findById(positionId)
+                .orElseThrow(() -> new EntityNotFoundException("position not found with id: " + positionId));
+
+        existingPosition.setTeam(positionRequest.getTeam());
+        existingPosition.setExecutiveTitle(positionRequest.getExecutiveTitle());
+        existingPosition.setCrewCommittee(positionRequest.getCrewCommittee());
+
+        // find the new term from TermRepository
+        Term newTerm = termRepository.findByName(existingPosition.getTerm().getName())
+                .orElseThrow(()-> new RuntimeException("term not found"));
+
+        existingPosition.setTerm(newTerm);
+
+        Position updatedPosition = positionRepository.save(existingPosition);
+        return positionMapper.toDTO(updatedPosition);
     }
 }

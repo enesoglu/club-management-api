@@ -1,6 +1,7 @@
 package com.cms.clubmanagementapi.controller;
 
 import com.cms.clubmanagementapi.dto.request.CreateMemberPositionRequest;
+import com.cms.clubmanagementapi.dto.request.UpdateMemberPositionRequest;
 import com.cms.clubmanagementapi.dto.response.PositionDTO;
 import com.cms.clubmanagementapi.service.PositionService;
 import jakarta.validation.Valid;
@@ -48,4 +49,13 @@ public class PositionController {
     public String deletePosition(@PathVariable Long positionId) {
         return positionService.deletePosition(positionId);
     }
+
+    // update position
+    @PutMapping("/members/update-position/{positionId}")
+    public ResponseEntity<PositionDTO> updatePosition(@PathVariable long positionId, @RequestBody UpdateMemberPositionRequest positionRequest) {
+        PositionDTO updatedPosition = positionService.updatePosition(positionId, positionRequest);
+
+        return ResponseEntity.ok(updatedPosition);
+    }
+
 }
