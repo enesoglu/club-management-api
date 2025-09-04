@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Data
 public class PositionDTO {
 
+    private long id;
     private Team team;
     private LocalDate startDate;
     private LocalDate endDate;
