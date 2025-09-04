@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/terms")
 public class TermController {
@@ -20,6 +22,12 @@ public class TermController {
     public TermController(TermService termService, TermRepository termRepository) {
         this.termService = termService;
         this.termRepository = termRepository;
+    }
+
+    // get all members
+    @GetMapping
+    public List<TermDTO> findAllTerms() {
+        return termService.findAllTerms();
     }
 
     // get active term name

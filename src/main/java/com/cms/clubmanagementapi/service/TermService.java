@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Service
 public class TermService {
 
@@ -21,6 +23,11 @@ public class TermService {
     public TermService(TermRepository termRepository,  TermMapper termMapper) {
         this.termRepository = termRepository;
         this.termMapper = termMapper;
+    }
+
+    public List<TermDTO> findAllTerms() {
+        List<Term> terms = termRepository.findAll();
+        return termMapper.toDTOList(terms);
     }
 
     public TermDTO findActiveTerm() {
