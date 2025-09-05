@@ -3,7 +3,6 @@ package com.cms.clubmanagementapi.controller;
 import com.cms.clubmanagementapi.dto.request.CreateTermRequest;
 import com.cms.clubmanagementapi.dto.request.UpdateTermRequest;
 import com.cms.clubmanagementapi.dto.response.TermDTO;
-import com.cms.clubmanagementapi.model.role.Term;
 import com.cms.clubmanagementapi.repository.TermRepository;
 import com.cms.clubmanagementapi.service.TermService;
 import jakarta.validation.Valid;
@@ -51,12 +50,12 @@ public class TermController {
     }
 
     @DeleteMapping("/delete-term/{id}")
-    public String deleteTerm(@PathVariable Long id) {
-        Term term = termRepository.findById(id)
+    public ResponseEntity<Void> deleteTerm(@PathVariable Long id) {
+        termRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No term by id:" + id));
 
         termService.deleteById(id);
-        return "term " + term.getName() + " deleted.";
+        return ResponseEntity.noContent().build();
     }
 
     // update term

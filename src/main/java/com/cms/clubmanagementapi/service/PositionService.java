@@ -12,12 +12,15 @@ import com.cms.clubmanagementapi.repository.ClubMemberRepository;
 import com.cms.clubmanagementapi.repository.PositionRepository;
 import com.cms.clubmanagementapi.repository.TermRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -130,49 +133,54 @@ public class PositionService {
     }
 
     @Transactional
-    public String deletePosition(@PathVariable long positionId){
+    public ResponseEntity<Map<String, Object>> deletePosition(long positionId) {
 
         Position positionToDelete = positionRepository.findById(positionId)
                 .orElseThrow(() -> new EntityNotFoundException("position not found with id: " + positionId));
 
-        // get member from position
-        ClubMember member = positionToDelete.getMember();
+        // response JSON object
+        Map<String, Object> responseBody = new HashMap<>();
 
+        ClubMember member = positionToDelete.getMember();
         long memberId = member.getId();
         long totalPositions = positionRepository.countByMemberId(memberId);
 
         // if member has only one position, set it's new position to "MEMBER" then delete it.
-        if (totalPositions == 1){
-
+        if (totalPositions == 1) {
             addPositionToMember(memberId, createDefaultMemberPosition());
             positionRepository.deleteById(positionId);
 
-            return ("position %d deleted and member's " +
-                    "new position is set to \"MEMBER\"")
-                    .formatted(positionId);
+            String message = String.format("Position %d deleted and member's new position is set to 'MEMBER'.", positionId);
+            responseBody.put("message", message);
+
+            return ResponseEntity.ok(responseBody);
         }
 
         // if to be deleted position is active and it's not the only position member has,
         // set last position to active then delete it.
-        else if (positionToDelete.isActive()){
-
+        else if (positionToDelete.isActive()) {
             Position lastPosition = positionRepository
                     .findLastPositionByPositionId(positionId)
-                    .orElseThrow(()-> new IllegalStateException(("could not find the previous position")));
+                    .orElseThrow(() -> new IllegalStateException("Could not find the previous position."));
 
             lastPosition.setActive(true);
-
             positionRepository.deleteById(positionId);
-            return ("position %d deleted and member's " +
-                    "previous position (id: %d) is active now.")
-                    .formatted(positionId, lastPosition.getId());
+
+            String message = String.format("Position %d deleted and member's previous position (id: %d) is active now.", positionId, lastPosition.getId());
+            responseBody.put("message", message);
+            responseBody.put("activatedPositionId", lastPosition.getId());
+
+            return ResponseEntity.ok(responseBody);
         }
 
         // if the position is not the only position and not active one
-        else{
+        else {
             positionRepository.deleteById(positionId);
-            return ("position %d deleted")
-                    .formatted(positionId);
+
+            String message = String.format("Position %d deleted.", positionId);
+            responseBody.put("message", message);
+
+            return ResponseEntity.ok(responseBody);
         }
     }
 
@@ -185,7 +193,7 @@ public class PositionService {
         existingPosition.setCrewCommittee(positionRequest.getCrewCommittee());
 
         // find the new term from TermRepository
-        Term newTerm = termRepository.findByName(existingPosition.getTerm().getName())
+        Term newTerm = termRepository.findById(positionRequest.getTerm().getId())
                 .orElseThrow(()-> new RuntimeException("term not found"));
 
         existingPosition.setTerm(newTerm);

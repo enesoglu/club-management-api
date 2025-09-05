@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -46,13 +47,14 @@ public class PositionController {
     /* delete a position and set the member's position
     to the last position it had */
     @DeleteMapping("/members/delete-position/{positionId}")
-    public String deletePosition(@PathVariable Long positionId) {
+    public ResponseEntity<Map<String, Object>> deletePosition(@PathVariable Long positionId) {
         return positionService.deletePosition(positionId);
     }
 
     // update position
-    @PutMapping("/members/update-position/{positionId}")
-    public ResponseEntity<PositionDTO> updatePosition(@PathVariable long positionId, @RequestBody UpdateMemberPositionRequest positionRequest) {
+    @PatchMapping("/members/update-position/{positionId}")
+    public ResponseEntity<PositionDTO> updatePosition(@PathVariable long positionId,
+                                                      @Valid @RequestBody UpdateMemberPositionRequest positionRequest) {
         PositionDTO updatedPosition = positionService.updatePosition(positionId, positionRequest);
 
         return ResponseEntity.ok(updatedPosition);
