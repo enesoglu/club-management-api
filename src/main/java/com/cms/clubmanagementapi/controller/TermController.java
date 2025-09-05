@@ -38,7 +38,7 @@ public class TermController {
 
     // make a term active
     // e.g: PUT, http://localhost:8080/api/terms/5/set-active
-    @PostMapping("/set-active/{id}")
+    @PutMapping("/set-active/{id}")
     public ResponseEntity<TermDTO> setActiveTerm(@PathVariable Long id) {
         TermDTO activeTerm = termService.setActiveTerm(id);
         return ResponseEntity.ok(activeTerm);
