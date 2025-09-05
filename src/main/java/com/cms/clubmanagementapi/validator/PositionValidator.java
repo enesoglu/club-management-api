@@ -1,14 +1,13 @@
 package com.cms.clubmanagementapi.validator;
 
-import com.cms.clubmanagementapi.dto.request.CreateMemberPositionRequest;
 import com.cms.clubmanagementapi.model.role.Team;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PositionValidator implements ConstraintValidator<ValidPosition, CreateMemberPositionRequest> {
+public class PositionValidator implements ConstraintValidator<ValidPosition, PositionValidationRequest> {
 
     @Override
-    public boolean isValid(CreateMemberPositionRequest request, ConstraintValidatorContext context) {
+    public boolean isValid(PositionValidationRequest request, ConstraintValidatorContext context) {
 
         // case of null is handled by PositionService
         if (request == null || request.getTeam() == null) {
